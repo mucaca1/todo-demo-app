@@ -8,6 +8,7 @@ import { EvoluProvider } from "@evolu/react";
 import { evolu } from "./evolu-init";
 import { MenuBar } from "./components/MenuBar";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
+import { SettingsPage } from "./pages/SettingsPage";
 
 const root = createRoot(document.body);
 
@@ -29,7 +30,7 @@ const ToDoApp = memo(function ToDoApp() {
                                         />
                                         <Route
                                             path="/settings"
-                                            element={<h1>{t('settings')}</h1>}
+                                            element={<SettingsPage />}
                                         />
                                     </Routes>
                                 </div>
