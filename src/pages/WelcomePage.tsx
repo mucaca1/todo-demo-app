@@ -17,10 +17,13 @@ import { Language, LanguageSelector } from "../components/LanguageSelector";
 import { ThemeContext } from "../context/ThemeContext";
 import { SettingRow } from "../components/FieldRow";
 import { themeLabels } from "../themes";
+import { useTranslation } from "react-i18next";
+import { useEvolu } from "../evolu-init";
 
 export function WelcomePage() {
+    const { insert } = useEvolu();
     const [step, setStep] = React.useState<0 | 1>(0);
-    const [language, setLanguage] = React.useState<Language>("en");
+    const { t, i18n } = useTranslation();
     const { mode, setTheme, storeTheme } = useContext(ThemeContext);
 
     const next = () => setStep((s) => (s === 0 ? 1 : s));
@@ -28,7 +31,8 @@ export function WelcomePage() {
 
     const finish = () => {
         // persist values (Evolu / local storage / context)
-        console.log({ language, mode });
+        console.log({ i18n, mode });
+        insert("settings", {language: i18n.language, theme: mode})
     };
 
     return (
@@ -44,7 +48,7 @@ export function WelcomePage() {
             <Card sx={{ width: 420 }}>
                 <CardContent>
                     <Typography variant="h5" gutterBottom>
-                        Welcome 👋
+                        {t("welcome")} 👋
                     </Typography>
 
                     <Stepper activeStep={step} sx={{ my: 3 }}>
@@ -64,8 +68,10 @@ export function WelcomePage() {
 
                             <SettingRow label="Language">
                                 <LanguageSelector
-                                    value={language}
-                                    onChange={setLanguage}
+                                    value={i18n.language as Language}
+                                    onChange={(e) => {
+                                        i18n.changeLanguage(e);
+                                    }} 
                                 />
                             </SettingRow>
                         </>
