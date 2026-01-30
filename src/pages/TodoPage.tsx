@@ -25,6 +25,10 @@ import { TodoId } from "./../evolu-db/evolu-db"
 import { activeTodos, TActiveTodosRow } from "../evolu-db/evolu-query";
 import { useEvolu } from "../evolu-init";
 
+export type IPageArgs = {
+    todoRows: QueryRows
+}
+
 export type Todo = {
     id: TodoId;
     title: string;
@@ -33,7 +37,7 @@ export type Todo = {
     finishedAt?: Date;
 };
 
-export default function TodoPage() {
+export default function TodoPage({todoRows} : IPageArgs) {
     const { insert, update } = useEvolu();
     const [showAllFinished, setShowAllFinished] = useState(false);
     const [openForm, setOpenForm] = useState(false);
@@ -41,10 +45,10 @@ export default function TodoPage() {
     const [title, setTitle] = useState("");
     const [description, setDescription] = useState("");
     const [todos, setTodos] = useState<Todo[]>([]);
-    const result: QueryRows<TActiveTodosRow> = useQuery(activeTodos);
+    //const result: QueryRows<TActiveTodosRow> = useQuery(activeTodos);
     const finished: Array<Todo> = [];
     const todoToWork: Array<Todo> = [];
-    result.forEach((row: TActiveTodosRow) => {
+    todoRows.forEach((row: TActiveTodosRow) => {
         if (row.isCompleted) {
             finished.push({
                 id: row.id as TodoId,

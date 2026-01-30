@@ -9,3 +9,9 @@ export const activeTodos: Evolu.Query = evolu.createQuery((db) =>
     .orderBy("completeAt")
 );
 export type TActiveTodosRow = typeof activeTodos.Row;
+
+export const settings: Evolu.Query = evolu.createQuery((db) =>
+    db.selectFrom("settings").select(["language", "theme"])
+);
+
+export type TSettingsRow = typeof settings.Row;

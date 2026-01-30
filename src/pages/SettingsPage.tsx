@@ -13,14 +13,18 @@ import {
 } from "@mui/material";
 import { useTranslation } from "react-i18next";
 import { SecretReadOnlyField } from "../components/SecretReadOnlyField";
-import { AppOwner, Mnemonic } from "@evolu/common";
+import { AppOwner, Mnemonic, QueryRows } from "@evolu/common";
 import { SettingRow } from "../components/FieldRow";
 import { Language, LanguageSelector } from "../components/LanguageSelector";
 import { ThemeContext } from "../context/ThemeContext";
 import { themeLabels } from "../themes";
 import { useEvolu } from "../evolu-init";
 
-export function SettingsPage() {
+export type ISettingsArgs = {
+    settingRows: QueryRows
+}
+
+export function SettingsPage({ settingRows }: ISettingsArgs) {
     const [isLoading, setIsLoading] = useState<boolean>(true);
     const [mnemonic, setMnemonic] = useState<string>("");
     const { mode, setTheme, storeTheme } = useContext(ThemeContext);

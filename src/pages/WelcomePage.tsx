@@ -1,0 +1,128 @@
+import React, { useContext } from "react";
+import {
+    Box,
+    Card,
+    CardContent,
+    Typography,
+    Button,
+    Stepper,
+    Step,
+    StepLabel,
+    Stack,
+    Select,
+    OutlinedInput,
+    MenuItem,
+} from "@mui/material";
+import { Language, LanguageSelector } from "../components/LanguageSelector";
+import { ThemeContext } from "../context/ThemeContext";
+import { SettingRow } from "../components/FieldRow";
+import { themeLabels } from "../themes";
+
+export function WelcomePage() {
+    const [step, setStep] = React.useState<0 | 1>(0);
+    const [language, setLanguage] = React.useState<Language>("en");
+    const { mode, setTheme, storeTheme } = useContext(ThemeContext);
+
+    const next = () => setStep((s) => (s === 0 ? 1 : s));
+    const back = () => setStep((s) => (s === 1 ? 0 : s));
+
+    const finish = () => {
+        // persist values (Evolu / local storage / context)
+        console.log({ language, mode });
+    };
+
+    return (
+        <Box
+            sx={{
+                minHeight: "100vh",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                bgcolor: "background.default",
+            }}
+        >
+            <Card sx={{ width: 420 }}>
+                <CardContent>
+                    <Typography variant="h5" gutterBottom>
+                        Welcome 👋
+                    </Typography>
+
+                    <Stepper activeStep={step} sx={{ my: 3 }}>
+                        <Step>
+                            <StepLabel>Language</StepLabel>
+                        </Step>
+                        <Step>
+                            <StepLabel>Theme</StepLabel>
+                        </Step>
+                    </Stepper>
+
+                    {step === 0 && (
+                        <>
+                            <Typography sx={{ mb: 2 }}>
+                                Choose your preferred language
+                            </Typography>
+
+                            <SettingRow label="Language">
+                                <LanguageSelector
+                                    value={language}
+                                    onChange={setLanguage}
+                                />
+                            </SettingRow>
+                        </>
+                    )}
+
+                    {step === 1 && (
+                        <>
+                            <Typography sx={{ mb: 2 }}>
+                                Choose how the app should look
+                            </Typography>
+
+                            <SettingRow label="Theme">
+                                <Select
+                                    value={mode}
+                                    onChange={(e) => setTheme(e.target.value)}
+                                    input={<OutlinedInput />}
+                                    size="small"
+                                    sx={{ maxWidth: 220 }}
+                                    fullWidth
+                                >
+                                    {Object.entries(themeLabels).map(([key, label]) => (
+                                        <MenuItem key={key} value={key}>
+                                            {label}
+                                        </MenuItem>
+                                    ))}
+                                </Select>
+                            </SettingRow>
+                        </>
+                    )}
+
+                    <Stack
+                        direction="row"
+                        justifyContent="space-between"
+                        sx={{ mt: 4 }}
+                    >
+                        <Button
+                            disabled={step === 0}
+                            onClick={back}
+                        >
+                            Back
+                        </Button>
+
+                        {step === 0 ? (
+                            <Button variant="contained" onClick={next}>
+                                Next
+                            </Button>
+                        ) : (
+                            <Button
+                                variant="contained"
+                                onClick={finish}
+                            >
+                                Continue
+                            </Button>
+                        )}
+                    </Stack>
+                </CardContent>
+            </Card>
+        </Box>
+    );
+}
