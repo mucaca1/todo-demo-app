@@ -2,6 +2,11 @@ import { createTheme } from '@mui/material/styles';
 
 export type ThemeMode = 'light' | 'dark';
 
+export const themeLabels: Record<ThemeMode, string> = {
+    light: "Light",
+    dark: "Dark",
+};
+
 export const lightTheme = createTheme({
     palette: {
         mode: 'light',

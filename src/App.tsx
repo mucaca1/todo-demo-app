@@ -9,11 +9,11 @@ import { evolu } from "./evolu-init";
 import { MenuBar } from "./components/MenuBar";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { SettingsPage } from "./pages/SettingsPage";
+import TodoPage from "./pages/TodoPage";
 
 const root = createRoot(document.body);
 
 const ToDoApp = memo(function ToDoApp() {
-    const { t, } = useTranslation();
     return (
         <div>
             <React.StrictMode>
@@ -26,7 +26,7 @@ const ToDoApp = memo(function ToDoApp() {
                                     <Routes>
                                         <Route
                                             path="/"
-                                            element={<h1>{t('home')}</h1>}
+                                            element={<TodoPage />}
                                         />
                                         <Route
                                             path="/settings"

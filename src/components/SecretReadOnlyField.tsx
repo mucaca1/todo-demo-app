@@ -13,11 +13,10 @@ interface SecretFieldOptions {
 }
 
 export function SecretReadOnlyField({ fieldName, loading, secretValue, canBeShowed = true, showCopyButton = true }: SecretFieldOptions) {
-
     const [showSecret, setShowSecret] = useState<boolean>(false);
 
     return (
-        <FormControl variant="outlined" fullWidth disabled>
+        <FormControl variant="outlined" fullWidth disabled={loading}>
             <InputLabel htmlFor="secret-context-content">{fieldName}</InputLabel>
             <OutlinedInput
                 value={showSecret ? secretValue : "• • • •  • • • •  • • • •  • • • •"}
