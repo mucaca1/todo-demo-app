@@ -7,9 +7,7 @@ import { useQueries } from "@evolu/react";
 import { activeTodos, settings } from "../evolu-db/evolu-query";
 import { QueryRows } from "@evolu/common";
 
-export function RootPage() {
-    const resultQueries: QueryRows[] = useQueries([activeTodos, settings]);
-    console.log(resultQueries);
+export function RootPage({rows}: {rows: QueryRows[]}) {
     return (
         <BrowserRouter>
             <MenuBar />
@@ -18,11 +16,11 @@ export function RootPage() {
                     <Routes>
                         <Route
                             path="/"
-                            element={<TodoPage todoRows={resultQueries[0]} />}
+                            element={<TodoPage todoRows={rows[0]} />}
                         />
                         <Route
                             path="/settings"
-                            element={<SettingsPage settingRows={resultQueries[1]} />}
+                            element={<SettingsPage settingRows={rows[1]} />}
                         />
                     </Routes>
                 </div>

@@ -30,8 +30,6 @@ export function WelcomePage() {
     const back = () => setStep((s) => (s === 1 ? 0 : s));
 
     const finish = () => {
-        // persist values (Evolu / local storage / context)
-        console.log({ i18n, mode });
         insert("settings", {language: i18n.language, theme: mode})
     };
 
