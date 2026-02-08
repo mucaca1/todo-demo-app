@@ -12,6 +12,7 @@ import { WelcomePage } from "./pages/WelcomePage";
 import { useTranslation } from "react-i18next";
 import { Language } from "./components/LanguageSelector";
 import { ThemeMode } from "./themes";
+import { UpdateNotification } from "./components/UpdateNotification";
 
 const root = createRoot(document.body);
 
@@ -41,6 +42,7 @@ const ToDoApp = memo(function ToDoApp() {
             <React.StrictMode>
                 <EvoluProvider value={evolu}>
                     <ThemeProvider>
+                        <UpdateNotification />
                         <Init />
                     </ThemeProvider>
                 </EvoluProvider>

@@ -10,8 +10,19 @@
     "lint": "eslint --ext .ts,.tsx .",
     "electron:dev": "electron-forge start",
     "electron:build": "electron-forge make",
+    "electron:build:win": "electron-forge make --platform=win32",
+    "electron:build:linux": "electron-forge make --platform=linux",
     "electron:package": "electron-forge package",
     "electron:publish": "electron-forge publish"
+  },
+  "build": {
+    "publish": [
+      {
+        "provider": "github",
+        "owner": "mucaca1",
+        "repo": "todo-demo-app"
+      }
+    ]
   },
   "keywords": [],
   "author": {
@@ -27,6 +38,7 @@
     "@electron-forge/plugin-auto-unpack-natives": "^7.8.1",
     "@electron-forge/plugin-fuses": "^7.8.1",
     "@electron-forge/plugin-vite": "^7.8.1",
+    "@electron-forge/publisher-github": "^7.11.1",
     "@electron/fuses": "^1.8.0",
     "@types/electron-squirrel-startup": "^1.0.2",
     "@typescript-eslint/eslint-plugin": "^5.62.0",
@@ -53,7 +65,9 @@
     "@types/react-dom": "^19.1.6",
     "@vitejs/plugin-react": "^4.5.2",
     "dayjs": "^1.11.18",
+    "electron-log": "^5.4.3",
     "electron-squirrel-startup": "^1.0.1",
+    "electron-updater": "^6.7.3",
     "i18next": "^25.2.1",
     "i18next-browser-languagedetector": "^8.2.0",
     "react-hook-form": "^7.60.0",
