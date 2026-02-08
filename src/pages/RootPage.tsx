@@ -6,25 +6,28 @@ import { SettingsPage } from "./SettingsPage";
 import { useQueries } from "@evolu/react";
 import { activeTodos, settings } from "../evolu-db/evolu-query";
 import { QueryRows } from "@evolu/common";
+import { MemoryRouter } from 'react-router-dom';
 
 export function RootPage({rows}: {rows: QueryRows[]}) {
     return (
-        <BrowserRouter>
-            <MenuBar />
-            <Suspense >
-                <div style={{ maxWidth: "90%", padding: "2rem" }}>
-                    <Routes>
-                        <Route
-                            path="/"
-                            element={<TodoPage todoRows={rows[0]} />}
-                        />
-                        <Route
-                            path="/settings"
-                            element={<SettingsPage settingRows={rows[1]} />}
-                        />
-                    </Routes>
-                </div>
-            </Suspense>
-        </BrowserRouter>
+        <MemoryRouter initialEntries={['/']} initialIndex={0}>
+            <BrowserRouter>
+                <MenuBar />
+                <Suspense >
+                    <div style={{ maxWidth: "90%", padding: "2rem" }}>
+                        <Routes>
+                            <Route
+                                path="/"
+                                element={<TodoPage todoRows={rows[0]} />}
+                            />
+                            <Route
+                                path="/settings"
+                                element={<SettingsPage settingRows={rows[1]} />}
+                            />
+                        </Routes>
+                    </div>
+                </Suspense>
+            </BrowserRouter>
+        </MemoryRouter>
     );
 }
