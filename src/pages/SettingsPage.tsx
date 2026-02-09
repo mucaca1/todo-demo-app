@@ -32,12 +32,15 @@ export function SettingsPage({ settingRows }: ISettingsArgs) {
     const evolu = useEvolu();
     const owner: Promise<AppOwner> = evolu.appOwner;
 
-    owner.then((appOwner: AppOwner) => {
-        if (appOwner.mnemonic) {
-            setMnemonic(appOwner.mnemonic.toString());
-            setIsLoading(false);
-        }
-    });
+    useEffect(() => {
+        owner.then((appOwner: AppOwner) => {
+            if (appOwner.mnemonic) {
+                setMnemonic(appOwner.mnemonic.toString());
+                setIsLoading(false);
+            }
+        });
+    }, []);
+
 
     // Restore owner from mnemonic to sync data across devices.
     const handleRestoreAppOwnerClick = () => {
@@ -106,6 +109,20 @@ export function SettingsPage({ settingRows }: ISettingsArgs) {
                                 </MenuItem>
                             ))}
                         </Select>
+
+                        {
+                            window.electron && 
+                            <Button
+                                variant="outlined"
+                                onClick={() => {
+                                    console.log("Update btn pressed.");
+                                    
+                                    window.electron?.checkForUpdates()
+                                }}
+                            >
+                                Check for Updates
+                            </Button>
+                        }
                         
                     </Stack>
                 </CardContent>
