@@ -27,7 +27,7 @@ const config: ForgeConfig = {
         owner: 'mucaca1',
         name: 'todo-demo-app',
       },
-      prerelease: true,
+      prerelease: false,
       draft: false, // Creates draft release first for review
     }),
   ],
