@@ -90,3 +90,6 @@ typings/
 
 # Electron-Forge
 out/
+
+# Claude folder
+.claude
