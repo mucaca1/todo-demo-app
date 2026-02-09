@@ -30,13 +30,16 @@ function generateLatestYml(outputPath: string, version: string): string | undefi
   hashSum.update(fileBuffer);
   const sha512 = hashSum.digest('base64');
 
+  // Replace spaces with dashes in URL (auto-updater expects dashes)
+  const setupUrl = setupExe.replace(/ /g, '-');
+
   // Create latest.yml content
   const latestYml = `version: ${version}
 files:
-  - url: ${setupExe}
+  - url: ${setupUrl}
     sha512: ${sha512}
     size: ${setupStats.size}
-path: ${setupExe}
+path: ${setupUrl}
 sha512: ${sha512}
 releaseDate: '${new Date().toISOString()}'
 `;
@@ -49,6 +52,7 @@ releaseDate: '${new Date().toISOString()}'
   console.log(`   Location: ${ymlPath}`);
   console.log(`   Version: ${version}`);
   console.log(`   File: ${setupExe}`);
+  console.log(`   URL: ${setupUrl}`);
 
   return ymlPath;
 }
@@ -129,12 +133,23 @@ const config: ForgeConfig = {
       for (const makeResult of makeResults) {
         console.log(`Platform: ${makeResult.platform}`);
 
-        for (const artifact of makeResult.artifacts) {
+        for (let i = 0; i < makeResult.artifacts.length; i++) {
+          const artifact = makeResult.artifacts[i];
           const artifactDir = path.dirname(artifact);
 
           // Only generate for Squirrel.Windows builds
-          if (artifact.includes('squirrel.windows')) {
+          if (artifact.includes('squirrel.windows') && artifact.includes(' Setup.exe')) {
             console.log(`Processing: ${artifactDir}`);
+
+            // Rename file from space to dash for consistent URL
+            const oldPath = artifact;
+            const newPath = path.join(artifactDir, path.basename(oldPath).replace(/ /g, '-'));
+            fs.renameSync(oldPath, newPath);
+            console.log(`Renamed: ${path.basename(oldPath)} -> ${path.basename(newPath)}`);
+
+            // Update the artifact path
+            makeResult.artifacts[i] = newPath;
+
             const ymlPath = generateLatestYml(artifactDir, version);
 
             // Add latest.yml to artifacts so it gets published to GitHub
