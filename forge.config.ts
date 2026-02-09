@@ -11,6 +11,9 @@ import { PublisherGithub } from '@electron-forge/publisher-github';
 const config: ForgeConfig = {
   packagerConfig: {
     asar: true,
+    extraResource: [
+      './app-update.yml'
+    ],
   },
   rebuildConfig: {},
   makers: [
