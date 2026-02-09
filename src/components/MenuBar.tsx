@@ -8,7 +8,7 @@ export function MenuBar() {
         <AppBar position="static">
             <Toolbar>
                 <Typography variant="h6" sx={{ flexGrow: 1 }}>
-                    ToDo Demo App - v1.0.3
+                    ToDo Demo App - v1.0.4
                 </Typography>
 
                 <Box>
