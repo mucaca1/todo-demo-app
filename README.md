@@ -11,14 +11,14 @@ The main goal on this project is create some simple structure for web / pc appli
     - [ ] Merge settings
 - [ ] Basic ToDo app
 - [ ] Electron
-    - [ ] Electron with run local
+    - [x] Electron with run local
     - [ ] Electron connect to web
     - [ ] Electron build build
-        - [ ] Windows
+        - [x] Windows
         - [ ] Linux
         - [ ] Apple
-    - [ ] Electron installer
-    - [ ] Electron version auto-updater
+    - [x] Electron installer
+    - [x] Electron version auto-updater
     - [ ] Menu use window components (instead web components in web)
 - [ ] Translations (multilanguage)
 - [ ] GitHub

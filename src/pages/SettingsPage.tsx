@@ -13,7 +13,7 @@ import {
 } from "@mui/material";
 import { useTranslation } from "react-i18next";
 import { SecretReadOnlyField } from "../components/SecretReadOnlyField";
-import { AppOwner, Mnemonic, QueryRows } from "@evolu/common";
+import { AppOwner, Mnemonic, QueryRows, createSharedOwner, createOwnerSecret, createRandomBytes } from "@evolu/common";
 import { SettingRow } from "../components/FieldRow";
 import { Language, LanguageSelector } from "../components/LanguageSelector";
 import { ThemeContext } from "../context/ThemeContext";
@@ -76,6 +76,23 @@ export function SettingsPage({ settingRows }: ISettingsArgs) {
         });
     };
 
+    const handleCreateSharedOwnerClick = () => {
+        // Create a new random owner secret using Evolu's crypto utilities
+        const secret = createOwnerSecret({ randomBytes: createRandomBytes() });
+
+        // Create the shared owner with the secret
+        const sharedOwner = createSharedOwner(secret);
+
+        // Get the mnemonic for sharing
+        const sharedMnemonic = sharedOwner.id.toString();
+
+        // Display the mnemonic to the user for sharing
+        window.prompt(
+            "Share this mnemonic with others to give them access to your data:",
+            sharedMnemonic
+        );
+    };
+
     return (
         <Box sx={{ maxWidth: 720, mx: "auto", p: 3 }}>
             <Typography variant="h4" gutterBottom>
@@ -132,6 +149,8 @@ export function SettingsPage({ settingRows }: ISettingsArgs) {
                         </Typography>
 
                         <Button onClick={handleDownloadDatabaseClick} variant="outlined">Download database</Button>
+
+                        <Button onClick={handleCreateSharedOwnerClick}>Create shared owner</Button>
                     </Stack>
                 </CardContent>
             </Card>
