@@ -14,7 +14,7 @@ import crypto from 'crypto';
 // Helper function to generate latest.yml
 function generateLatestYml(outputPath: string, version: string): string | undefined {
   const files = fs.readdirSync(outputPath);
-  const setupExe = files.find(f => f.match(/ Setup\.exe$/i));
+  const setupExe = files.find(f => f.match(/Setup\.exe$/i));
 
   if (!setupExe) {
     console.warn('⚠️  Setup.exe not found, skipping latest.yml generation');
