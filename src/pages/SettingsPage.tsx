@@ -109,20 +109,6 @@ export function SettingsPage({ settingRows }: ISettingsArgs) {
                                 </MenuItem>
                             ))}
                         </Select>
-
-                        {
-                            window.electron && 
-                            <Button
-                                variant="outlined"
-                                onClick={() => {
-                                    console.log("Update btn pressed.");
-                                    
-                                    window.electron?.checkForUpdates()
-                                }}
-                            >
-                                Check for Updates
-                            </Button>
-                        }
                         
                     </Stack>
                 </CardContent>

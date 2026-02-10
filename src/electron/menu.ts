@@ -1,4 +1,5 @@
 import { app, BrowserWindow, Menu } from "electron";
+import { autoUpdater } from "electron-updater";
 
 const name = app.getName();
 
@@ -9,6 +10,14 @@ export function createMenu(bw: BrowserWindow) {
             submenu: [
                 {
                     label: 'Settings'
+                },
+                {
+                    label: 'Update app',
+                    click: () => {
+                        autoUpdater.checkForUpdates().catch((err) => {
+                            console.error('Failed to check for updates:', err);
+                        });
+                    }
                 },
                 {
                     label: 'Source',
