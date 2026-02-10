@@ -13,7 +13,9 @@
     "electron:build:win": "electron-forge make --platform=win32",
     "electron:build:linux": "electron-forge make --platform=linux",
     "electron:package": "electron-forge package",
-    "electron:publish": "electron-forge publish"
+    "electron:publish": "electron-forge publish",
+    "storybook": "storybook dev -p 6006",
+    "build-storybook": "storybook build"
   },
   "build": {
     "publish": [
@@ -30,6 +32,7 @@
   },
   "license": "MIT",
   "devDependencies": {
+    "@chromatic-com/storybook": "^5.0.1",
     "@electron-forge/cli": "^7.8.1",
     "@electron-forge/maker-deb": "^7.8.1",
     "@electron-forge/maker-rpm": "^7.8.1",
@@ -40,15 +43,27 @@
     "@electron-forge/plugin-vite": "^7.8.1",
     "@electron-forge/publisher-github": "^7.11.1",
     "@electron/fuses": "^1.8.0",
+    "@storybook/addon-a11y": "^10.2.8",
+    "@storybook/addon-docs": "^10.2.8",
+    "@storybook/addon-onboarding": "^10.2.8",
+    "@storybook/addon-vitest": "^10.2.8",
+    "@storybook/react-vite": "^10.2.8",
+    "@tanstack/react-query": "^5.90.20",
     "@types/electron-squirrel-startup": "^1.0.2",
     "@typescript-eslint/eslint-plugin": "^5.62.0",
     "@typescript-eslint/parser": "^5.62.0",
+    "@vitest/browser-playwright": "^4.0.18",
+    "@vitest/coverage-v8": "^4.0.18",
     "electron": "36.9.3",
     "eslint": "^8.57.1",
     "eslint-plugin-import": "^2.31.0",
+    "eslint-plugin-storybook": "^10.2.8",
+    "playwright": "^1.58.2",
+    "storybook": "^10.2.8",
     "ts-node": "^10.9.2",
     "typescript": "^5.8.3",
-    "vite": "^5.4.20"
+    "vite": "^5.4.20",
+    "vitest": "^4.0.18"
   },
   "dependencies": {
     "@effect/schema": "^0.75.5",
@@ -74,5 +89,10 @@
     "react-i18next": "^15.5.3",
     "react-router-dom": "^7.6.2",
     "react-toastify": "^11.0.5"
+  },
+  "eslintConfig": {
+    "extends": [
+      "plugin:storybook/recommended"
+    ]
   }
 }

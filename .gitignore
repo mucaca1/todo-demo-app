@@ -93,3 +93,5 @@ out/
 
 # Claude folder
 .claude
+*storybook.log
+storybook-static
