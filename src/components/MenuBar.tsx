@@ -8,15 +8,15 @@ export function MenuBar() {
         <AppBar position="static">
             <Toolbar>
                 <Typography variant="h6" sx={{ flexGrow: 1 }}>
-                    ToDo Demo App - v1.0.4
+                    {t('app.title')} - v1.0.4
                 </Typography>
 
                 <Box>
                     <Button color="inherit" component={RouterLink} to="/">
-                        { t('home') }
+                        { t('common.home') }
                     </Button>
                     <Button color="inherit" component={RouterLink} to="/settings">
-                        { t('settings') }
+                        { t('common.settings') }
                     </Button>
                 </Box>
             </Toolbar>

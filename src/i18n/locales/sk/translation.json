@@ -1,6 +1,96 @@
 {
-    "welcome": "Vitajte",
-    "hello": "Vitajte",
-    "home": "Domov",
-    "settings": "Nastavenia"
+    "common": {
+        "welcome": "Vitajte",
+        "hello": "Ahoj",
+        "home": "Domov",
+        "settings": "Nastavenia",
+        "save": "Uložiť",
+        "cancel": "Zrušiť",
+        "back": "Späť",
+        "next": "Ďalej",
+        "continue": "Pokračovať",
+        "later": "Neskor"
+    },
+    "app": {
+        "title": "Demo Todo Aplikácia",
+        "version": "v{version}"
+    },
+    "todo": {
+        "title": "Todo",
+        "addTodo": "Pridať Todo",
+        "active": "Aktívne",
+        "finished": "Dokonené",
+        "noActiveTodos": "Žiadne aktívne todos",
+        "showLast3": "Zobraziť posledné 3",
+        "showAllTodos": "Zobraziť všetky todos",
+        "editTodo": "Upraviť Todo",
+        "newTodo": "Nové Todo",
+        "form": {
+            "title": "Názov",
+            "description": "Popis"
+        }
+    },
+    "settings": {
+        "title": "Nastavenia",
+        "sections": {
+            "data": "Dáta",
+            "owner": "Vlastník",
+            "dangerZone": "Nebezpečná zóna"
+        },
+        "language": "Jazyk",
+        "importOwnerWarning": "Importovanie vlastníka nahradí aktuálnu identitu a tajný kľúč.",
+        "restoreOwnerWarning": "Toto obnoví vaše lokálne dáta pre vlastníka.",
+        "deleteAccountWarning": "Táto akcia trvale odstráni vlastníka a všetky lokálne dáta. Túto akciu nemožno vrátiť späť.",
+        "downloadDatabase": "Stiahnuť databázu",
+        "createSharedOwner": "Vytvoriť zdieľaného vlastníka",
+        "restoreAppOwner": "Obnoviť vlastníka aplikácie",
+        "deleteAccount": "Odstrániť účet",
+        "mnemonic": {
+            "label": "Mnemonic",
+            "restorePrompt": "Zadajte svoj mnemonic pre obnovenie vašich dát:",
+            "shareInstruction": "Zdieľajte tento mnemonic s ostatnými, aby ste im dali prístup k vašim dátom:"
+        }
+    },
+    "welcome": {
+        "greeting": "Vitajte 👋",
+        "steps": {
+            "language": "Jazyk",
+            "theme": "Téma"
+        },
+        "language": {
+            "instruction": "Vyberte si preferovaný jazyk"
+        },
+        "theme": {
+            "instruction": "Vyberte si, ako má aplikácia vyzerať"
+        }
+    },
+    "menu": {
+        "settings": "Nastavenia",
+        "updateApp": "Aktualizovať aplikáciu",
+        "source": "Zdroj",
+        "view": "Zobrazenie"
+    },
+    "language": {
+        "english": "English (EN)",
+        "slovak": "Slovensky (SK)"
+    },
+    "theme": {
+        "label": "Téma",
+        "light": "Svetlá",
+        "dark": "Tmavá"
+    },
+    "update": {
+        "checking": "Kontrolujem aktualizácie...",
+        "downloading": "Sťahujem aktualizáciu v{version}",
+        "progress": "{progress}% hotovo",
+        "ready": {
+            "title": "Aktualizácia pripravená",
+            "message": "Verzia {version} bola stiahnutá a je pripravená na inštaláciu.",
+            "restartMessage": "Aplikácia sa reštartuje na dokončenie inštalácie."
+        },
+        "restartAndInstall": "Reštartovať a nainštalovať"
+    },
+    "secret": {
+        "hiddenPlaceholder": "• • • •  • • • •  • • • •  • • • •"
+    }
 }

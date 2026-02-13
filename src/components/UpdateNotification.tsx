@@ -13,6 +13,7 @@ import {
     IconButton,
 } from '@mui/material';
 import { Close as CloseIcon } from '@mui/icons-material';
+import { useTranslation } from 'react-i18next';
 
 declare global {
     interface Window {
@@ -30,6 +31,7 @@ declare global {
 }
 
 export const UpdateNotification: React.FC = () => {
+    const { t } = useTranslation();
     const [checking, setChecking] = useState(false);
     const [updateAvailable, setUpdateAvailable] = useState(false);
     const [updateDownloaded, setUpdateDownloaded] = useState(false);
@@ -100,7 +102,7 @@ export const UpdateNotification: React.FC = () => {
                 anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
             >
                 <Alert severity="info">
-                    <Typography variant="body2">Checking for updates...</Typography>
+                    <Typography variant="body2">{t('update.checking')}</Typography>
                 </Alert>
             </Snackbar>
 
@@ -137,7 +139,7 @@ export const UpdateNotification: React.FC = () => {
                     }
                 >
                     <Typography variant="body2" fontWeight="medium">
-                        Downloading update v{updateInfo?.version}
+                        {t('update.downloading', { version: updateInfo?.version })}
                     </Typography>
                     <Box sx={{ mt: 1, mb: 0.5 }}>
                         <LinearProgress
@@ -146,7 +148,7 @@ export const UpdateNotification: React.FC = () => {
                         />
                     </Box>
                     <Typography variant="caption" color="text.secondary">
-                        {Math.round(downloadProgress)}% complete
+                        {t('update.progress', { progress: Math.round(downloadProgress) })}
                     </Typography>
                 </Alert>
             </Snackbar>
@@ -157,22 +159,22 @@ export const UpdateNotification: React.FC = () => {
                 onClose={() => setUpdateDownloaded(false)}
             >
                 <DialogTitle>
-                    Update Ready
+                    {t('update.ready.title')}
                 </DialogTitle>
                 <DialogContent>
                     <Typography variant="body1">
-                        Version {updateInfo?.version} has been downloaded and is ready to install.
+                        {t('update.ready.message', { version: updateInfo?.version })}
                     </Typography>
                     <Typography variant="body2" color="text.secondary" sx={{ mt: 2 }}>
-                        The app will restart to complete the installation.
+                        {t('update.ready.restartMessage')}
                     </Typography>
                 </DialogContent>
                 <DialogActions>
                     <Button onClick={() => setUpdateDownloaded(false)}>
-                        Later
+                        {t('common.later')}
                     </Button>
                     <Button onClick={handleInstall} variant="contained" autoFocus>
-                        Restart & Install
+                        {t('update.restartAndInstall')}
                     </Button>
                 </DialogActions>
             </Dialog>

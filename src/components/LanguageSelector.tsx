@@ -1,11 +1,7 @@
 import { MenuItem, OutlinedInput, Select } from "@mui/material";
+import { useTranslation } from "react-i18next";
 
 export type Language = "en" | "sk";
-
-const languageLabels: Record<Language, string> = {
-    en: "English (EN)",
-    sk: "Slovensky (SK)",
-};
 
 export function LanguageSelector({
     value,
@@ -14,6 +10,13 @@ export function LanguageSelector({
     value: Language;
     onChange: (value: Language) => void;
 }) {
+    const { t } = useTranslation();
+
+    const languages: Record<Language, string> = {
+        en: t("language.english"),
+        sk: t("language.slovak"),
+    };
+
     return (
         <Select
             value={value}
@@ -23,7 +26,7 @@ export function LanguageSelector({
             sx={{ maxWidth: 220 }}
             fullWidth
         >
-            {Object.entries(languageLabels).map(([key, label]) => (
+            {Object.entries(languages).map(([key, label]) => (
                 <MenuItem key={key} value={key}>
                     {label}
                 </MenuItem>

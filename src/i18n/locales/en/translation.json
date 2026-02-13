@@ -1,6 +1,96 @@
 {
-    "welcome": "Welcome",
-    "hello": "Hello",
-    "home": "Home",
-    "settings": "Settings"
+    "common": {
+        "welcome": "Welcome",
+        "hello": "Hello",
+        "home": "Home",
+        "settings": "Settings",
+        "save": "Save",
+        "cancel": "Cancel",
+        "back": "Back",
+        "next": "Next",
+        "continue": "Continue",
+        "later": "Later"
+    },
+    "app": {
+        "title": "ToDo Demo App",
+        "version": "v{version}"
+    },
+    "todo": {
+        "title": "Todo",
+        "addTodo": "Add Todo",
+        "active": "Active",
+        "finished": "Finished",
+        "noActiveTodos": "No active todos",
+        "showLast3": "Show last 3",
+        "showAllTodos": "Show all todos",
+        "editTodo": "Edit Todo",
+        "newTodo": "New Todo",
+        "form": {
+            "title": "Title",
+            "description": "Description"
+        }
+    },
+    "settings": {
+        "title": "Settings",
+        "sections": {
+            "data": "Data",
+            "owner": "Owner",
+            "dangerZone": "Danger Zone"
+        },
+        "language": "Language",
+        "importOwnerWarning": "Importing an owner replaces the current identity and secret.",
+        "restoreOwnerWarning": "This restores your local data for owner.",
+        "deleteAccountWarning": "This permanently deletes the owner and all local data. This action cannot be undone.",
+        "downloadDatabase": "Download database",
+        "createSharedOwner": "Create shared owner",
+        "restoreAppOwner": "Restore app owner",
+        "deleteAccount": "Delete Account",
+        "mnemonic": {
+            "label": "Mnemonic",
+            "restorePrompt": "Enter your mnemonic to restore your data:",
+            "shareInstruction": "Share this mnemonic with others to give them access to your data:"
+        }
+    },
+    "welcome": {
+        "greeting": "Welcome 👋",
+        "steps": {
+            "language": "Language",
+            "theme": "Theme"
+        },
+        "language": {
+            "instruction": "Choose your preferred language"
+        },
+        "theme": {
+            "instruction": "Choose how the app should look"
+        }
+    },
+    "menu": {
+        "settings": "Settings",
+        "updateApp": "Update app",
+        "source": "Source",
+        "view": "View"
+    },
+    "language": {
+        "english": "English (EN)",
+        "slovak": "Slovensky (SK)"
+    },
+    "theme": {
+        "label": "Theme",
+        "light": "Light",
+        "dark": "Dark"
+    },
+    "update": {
+        "checking": "Checking for updates...",
+        "downloading": "Downloading update v{version}",
+        "progress": "{progress}% complete",
+        "ready": {
+            "title": "Update Ready",
+            "message": "Version {version} has been downloaded and is ready to install.",
+            "restartMessage": "The app will restart to complete the installation."
+        },
+        "restartAndInstall": "Restart & Install"
+    },
+    "secret": {
+        "hiddenPlaceholder": "• • • •  • • • •  • • • •  • • • •"
+    }
 }

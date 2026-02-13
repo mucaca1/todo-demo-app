@@ -24,6 +24,7 @@ import { DateIso, QueryRows } from "@evolu/common";
 import { TodoId } from "./../evolu-db/evolu-db"
 import { activeTodos, TActiveTodosRow } from "../evolu-db/evolu-query";
 import { useEvolu } from "../evolu-init";
+import { useTranslation } from "react-i18next";
 
 export type IPageArgs = {
     todoRows: QueryRows
@@ -39,6 +40,7 @@ export type Todo = {
 
 export default function TodoPage({todoRows} : IPageArgs) {
     const { insert, update } = useEvolu();
+    const { t } = useTranslation();
     const [showAllFinished, setShowAllFinished] = useState(false);
     const [openForm, setOpenForm] = useState(false);
     const [editing, setEditing] = useState<Todo | null>(null);
@@ -131,14 +133,14 @@ export default function TodoPage({todoRows} : IPageArgs) {
     return (
         <Box p={3} maxWidth={800} mx="auto">
             <Stack direction="row" justifyContent="space-between" mb={2}>
-                <Typography variant="h5">Todo</Typography>
+                <Typography variant="h5">{t("todo.title")}</Typography>
                 <Button variant="contained" onClick={openAdd}>
-                    Add Todo
+                    {t("todo.addTodo")}
                 </Button>
             </Stack>
 
             <Typography variant="h6" gutterBottom>
-                Active
+                {t("todo.active")}
             </Typography>
             <List>
                 {todoToWork.map((todo) => (
@@ -165,19 +167,19 @@ export default function TodoPage({todoRows} : IPageArgs) {
                 ))}
                 {todoToWork.length === 0 && (
                     <Typography color="text.secondary" px={2}>
-                        No active todos
+                        {t("todo.noActiveTodos")}
                     </Typography>
                 )}
             </List>
 
             <Stack direction="row" justifyContent="space-between" mb={2}>
-                <Typography variant="h6">Finished</Typography>
+                <Typography variant="h6">{t("todo.finished")}</Typography>
                 {finished.length > 3 && (
                     <Button
                         size="small"
                         onClick={() => setShowAllFinished((v) => !v)}
                     >
-                        {showAllFinished ? "Show last 3" : "Show all todos"}
+                        {showAllFinished ? t("todo.showLast3") : t("todo.showAllTodos")}
                     </Button>
                 )}
             </Stack>
@@ -208,18 +210,18 @@ export default function TodoPage({todoRows} : IPageArgs) {
             </List>
 
             <Dialog open={openForm} onClose={() => setOpenForm(false)} fullWidth>
-                <DialogTitle>{editing ? "Edit Todo" : "New Todo"}</DialogTitle>
+                <DialogTitle>{editing ? t("todo.editTodo") : t("todo.newTodo")}</DialogTitle>
                 <DialogContent>
                     <Stack spacing={2} mt={1}>
                         <TextField
-                            label="Title"
+                            label={t("todo.form.title")}
                             value={title}
                             onChange={(e) => setTitle(e.target.value)}
                             required
                             autoFocus
                         />
                         <TextField
-                            label="Description"
+                            label={t("todo.form.description")}
                             value={description}
                             onChange={(e) => setDescription(e.target.value)}
                             multiline
@@ -228,9 +230,9 @@ export default function TodoPage({todoRows} : IPageArgs) {
                     </Stack>
                 </DialogContent>
                 <DialogActions>
-                    <Button onClick={() => setOpenForm(false)}>Cancel</Button>
+                    <Button onClick={() => setOpenForm(false)}>{t("common.cancel")}</Button>
                     <Button variant="contained" onClick={saveTodo}>
-                        Save
+                        {t("common.save")}
                     </Button>
                 </DialogActions>
             </Dialog>

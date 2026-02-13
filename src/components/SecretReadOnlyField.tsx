@@ -3,6 +3,7 @@ import { useState } from "react";
 import ContentCopyIcon from '@mui/icons-material/ContentCopy';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
+import { useTranslation } from "react-i18next";
 
 interface SecretFieldOptions {
     fieldName: string,
@@ -14,12 +15,13 @@ interface SecretFieldOptions {
 
 export function SecretReadOnlyField({ fieldName, loading, secretValue, canBeShowed = true, showCopyButton = true }: SecretFieldOptions) {
     const [showSecret, setShowSecret] = useState<boolean>(false);
+    const { t } = useTranslation();
 
     return (
         <FormControl variant="outlined" fullWidth disabled={loading}>
             <InputLabel htmlFor="secret-context-content">{fieldName}</InputLabel>
             <OutlinedInput
-                value={showSecret ? secretValue : "• • • •  • • • •  • • • •  • • • •"}
+                value={showSecret ? secretValue : t('secret.hiddenPlaceholder')}
                 id="secret-context-content"
                 type={"text"}
                 disabled={loading}
@@ -37,7 +39,7 @@ export function SecretReadOnlyField({ fieldName, loading, secretValue, canBeShow
                                 <ContentCopyIcon />
                             </IconButton>
                         }
-                            
+
                             {
                                 canBeShowed && <IconButton
                                     disabled={loading}
@@ -51,7 +53,7 @@ export function SecretReadOnlyField({ fieldName, loading, secretValue, canBeShow
                         </InputAdornment>
                     </div>
                 }
-                label="Mnemonic"
+                label={fieldName}
             />
         </FormControl>
     );

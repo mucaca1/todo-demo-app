@@ -16,15 +16,16 @@ import {
 import { Language, LanguageSelector } from "../components/LanguageSelector";
 import { ThemeContext } from "../context/ThemeContext";
 import { SettingRow } from "../components/FieldRow";
-import { themeLabels } from "../themes";
 import { useTranslation } from "react-i18next";
 import { useEvolu } from "../evolu-init";
+import { useThemeLabels } from "../hooks/useThemeLabels";
 
 export function WelcomePage() {
     const { insert } = useEvolu();
     const [step, setStep] = React.useState<0 | 1>(0);
     const { t, i18n } = useTranslation();
     const { mode, setTheme, storeTheme } = useContext(ThemeContext);
+    const themeLabels = useThemeLabels();
 
     const next = () => setStep((s) => (s === 0 ? 1 : s));
     const back = () => setStep((s) => (s === 1 ? 0 : s));
@@ -46,25 +47,25 @@ export function WelcomePage() {
             <Card sx={{ width: 420 }}>
                 <CardContent>
                     <Typography variant="h5" gutterBottom>
-                        {t("welcome")} 👋
+                        {t("welcome.greeting")}
                     </Typography>
 
                     <Stepper activeStep={step} sx={{ my: 3 }}>
                         <Step>
-                            <StepLabel>Language</StepLabel>
+                            <StepLabel>{t("welcome.steps.language")}</StepLabel>
                         </Step>
                         <Step>
-                            <StepLabel>Theme</StepLabel>
+                            <StepLabel>{t("welcome.steps.theme")}</StepLabel>
                         </Step>
                     </Stepper>
 
                     {step === 0 && (
                         <>
                             <Typography sx={{ mb: 2 }}>
-                                Choose your preferred language
+                                {t("welcome.language.instruction")}
                             </Typography>
 
-                            <SettingRow label="Language">
+                            <SettingRow label={t("welcome.steps.language")}>
                                 <LanguageSelector
                                     value={i18n.language as Language}
                                     onChange={(e) => {
@@ -78,10 +79,10 @@ export function WelcomePage() {
                     {step === 1 && (
                         <>
                             <Typography sx={{ mb: 2 }}>
-                                Choose how the app should look
+                                {t("welcome.theme.instruction")}
                             </Typography>
 
-                            <SettingRow label="Theme">
+                            <SettingRow label={t("welcome.steps.theme")}>
                                 <Select
                                     value={mode}
                                     onChange={(e) => setTheme(e.target.value)}
@@ -109,19 +110,19 @@ export function WelcomePage() {
                             disabled={step === 0}
                             onClick={back}
                         >
-                            Back
+                            {t("common.back")}
                         </Button>
 
                         {step === 0 ? (
                             <Button variant="contained" onClick={next}>
-                                Next
+                                {t("common.next")}
                             </Button>
                         ) : (
                             <Button
                                 variant="contained"
                                 onClick={finish}
                             >
-                                Continue
+                                {t("common.continue")}
                             </Button>
                         )}
                     </Stack>

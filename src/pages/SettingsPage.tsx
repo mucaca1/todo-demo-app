@@ -17,7 +17,7 @@ import { AppOwner, Mnemonic, QueryRows, createSharedOwner, createOwnerSecret, cr
 import { SettingRow } from "../components/FieldRow";
 import { Language, LanguageSelector } from "../components/LanguageSelector";
 import { ThemeContext } from "../context/ThemeContext";
-import { themeLabels } from "../themes";
+import { useThemeLabels } from "../hooks/useThemeLabels";
 import { useEvolu } from "../evolu-init";
 
 export type ISettingsArgs = {
@@ -31,6 +31,7 @@ export function SettingsPage({ settingRows }: ISettingsArgs) {
     const { t, i18n } = useTranslation();
     const evolu = useEvolu();
     const owner: Promise<AppOwner> = evolu.appOwner;
+    const themeLabels = useThemeLabels();
 
     useEffect(() => {
         owner.then((appOwner: AppOwner) => {
@@ -44,7 +45,7 @@ export function SettingsPage({ settingRows }: ISettingsArgs) {
 
     // Restore owner from mnemonic to sync data across devices.
     const handleRestoreAppOwnerClick = () => {
-        const mnemonic = window.prompt("Enter your mnemonic to restore your data:");
+        const mnemonic = window.prompt(t("settings.mnemonic.restorePrompt"));
         if (mnemonic == null) return;
 
         const result = Mnemonic.from(mnemonic.trim());
@@ -88,7 +89,7 @@ export function SettingsPage({ settingRows }: ISettingsArgs) {
 
         // Display the mnemonic to the user for sharing
         window.prompt(
-            "Share this mnemonic with others to give them access to your data:",
+            t("settings.mnemonic.shareInstruction"),
             sharedMnemonic
         );
     };
@@ -96,17 +97,17 @@ export function SettingsPage({ settingRows }: ISettingsArgs) {
     return (
         <Box sx={{ maxWidth: 720, mx: "auto", p: 3 }}>
             <Typography variant="h4" gutterBottom>
-                Settings
+                {t("settings.title")}
             </Typography>
 
             {/* Data */}
             <Card sx={{ mb: 3 }}>
                 <CardContent>
-                    <Typography variant="h6">Data</Typography>
+                    <Typography variant="h6">{t("settings.sections.data")}</Typography>
                     <Divider sx={{ my: 2 }} />
 
                     <Stack spacing={2}>
-                        <SettingRow label="Language">
+                        <SettingRow label={t("settings.language")}>
                             <LanguageSelector value={i18n.language as Language} onChange={(e) => {
                                 i18n.changeLanguage(e);
                             }} />
@@ -134,23 +135,23 @@ export function SettingsPage({ settingRows }: ISettingsArgs) {
             {/* Owner */}
             <Card sx={{ mb: 3 }}>
                 <CardContent>
-                    <Typography variant="h6">Owner</Typography>
+                    <Typography variant="h6">{t("settings.sections.owner")}</Typography>
                     <Divider sx={{ my: 2 }} />
 
                     <Stack spacing={2}>
                         <SecretReadOnlyField
-                            fieldName="Mnemonic"
+                            fieldName={t("settings.mnemonic.label")}
                             loading={isLoading}
                             secretValue={mnemonic}
                         />
 
                         <Typography variant="body2" color="text.secondary">
-                            Importing an owner replaces the current identity and secret.
+                            {t("settings.importOwnerWarning")}
                         </Typography>
 
-                        <Button onClick={handleDownloadDatabaseClick} variant="outlined">Download database</Button>
+                        <Button onClick={handleDownloadDatabaseClick} variant="outlined">{t("settings.downloadDatabase")}</Button>
 
-                        <Button onClick={handleCreateSharedOwnerClick}>Create shared owner</Button>
+                        <Button onClick={handleCreateSharedOwnerClick}>{t("settings.createSharedOwner")}</Button>
                     </Stack>
                 </CardContent>
             </Card>
@@ -159,21 +160,20 @@ export function SettingsPage({ settingRows }: ISettingsArgs) {
             <Card sx={{ border: "1px solid", borderColor: "error.main" }}>
                 <CardContent>
                     <Typography variant="h6" color="error">
-                        Danger Zone
+                        {t("settings.sections.dangerZone")}
                     </Typography>
 
                     <Divider sx={{ my: 2 }} />
                     <Typography variant="body2" sx={{ mb: 2 }}>
-                        This restore your local data for owner.
+                        {t("settings.restoreOwnerWarning")}
                     </Typography>
                     <Button onClick={handleRestoreAppOwnerClick} fullWidth variant="outlined">
-                        Restore app owner
+                        {t("settings.restoreAppOwner")}
                     </Button>
                     <Divider sx={{ my: 2 }} />
 
                     <Typography variant="body2" sx={{ mb: 2 }}>
-                        This permanently deletes the owner and all local data.
-                        This action cannot be undone.
+                        {t("settings.deleteAccountWarning")}
                     </Typography>
                     <Button
                         fullWidth
@@ -181,7 +181,7 @@ export function SettingsPage({ settingRows }: ISettingsArgs) {
                         color="error"
                         onClick={handleResetAppOwnerClick}
                     >
-                        Delete Account
+                        {t("settings.deleteAccount")}
                     </Button>
                 </CardContent>
             </Card>
