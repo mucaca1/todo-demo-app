@@ -19,6 +19,10 @@ import {
 } from "@mui/material";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
+import AddIcon from "@mui/icons-material/Add";
+import CheckBoxOutlineBlankIcon from "@mui/icons-material/CheckBoxOutlineBlank";
+import CheckBoxIcon from "@mui/icons-material/CheckBox";
+import PlaylistAddCheckIcon from "@mui/icons-material/PlaylistAddCheck";
 import { useQuery } from "@evolu/react";
 import { DateIso, QueryRows } from "@evolu/common";
 import { TodoId } from "./../evolu-db/evolu-db"
@@ -133,15 +137,19 @@ export default function TodoPage({todoRows} : IPageArgs) {
     return (
         <Box p={3} maxWidth={800} mx="auto">
             <Stack direction="row" justifyContent="space-between" mb={2}>
-                <Typography variant="h5">{t("todo.title")}</Typography>
-                <Button variant="contained" onClick={openAdd}>
+                <Stack direction="row" alignItems="center" spacing={1}>
+                    <PlaylistAddCheckIcon color="primary" />
+                    <Typography variant="h5">{t("todo.title")}</Typography>
+                </Stack>
+                <Button variant="contained" startIcon={<AddIcon />} onClick={openAdd}>
                     {t("todo.addTodo")}
                 </Button>
             </Stack>
 
-            <Typography variant="h6" gutterBottom>
-                {t("todo.active")}
-            </Typography>
+            <Stack direction="row" alignItems="center" spacing={1} mb={1}>
+                <CheckBoxOutlineBlankIcon color="primary" />
+                <Typography variant="h6">{t("todo.active")}</Typography>
+            </Stack>
             <List>
                 {todoToWork.map((todo) => (
                     <Collapse key={todo.id} in timeout={300}>
@@ -166,14 +174,26 @@ export default function TodoPage({todoRows} : IPageArgs) {
                     </Collapse>
                 ))}
                 {todoToWork.length === 0 && (
-                    <Typography color="text.secondary" px={2}>
+                    <Typography
+                        color="text.secondary"
+                        px={2}
+                        py={3}
+                        textAlign="center"
+                        sx={{
+                            fontStyle: 'italic',
+                            opacity: 0.7
+                        }}
+                    >
                         {t("todo.noActiveTodos")}
                     </Typography>
                 )}
             </List>
 
-            <Stack direction="row" justifyContent="space-between" mb={2}>
-                <Typography variant="h6">{t("todo.finished")}</Typography>
+            <Stack direction="row" justifyContent="space-between" alignItems="center" mb={2}>
+                <Stack direction="row" alignItems="center" spacing={1}>
+                    <CheckBoxIcon color="success" />
+                    <Typography variant="h6">{t("todo.finished")}</Typography>
+                </Stack>
                 {finished.length > 3 && (
                     <Button
                         size="small"
