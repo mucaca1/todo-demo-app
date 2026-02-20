@@ -11,7 +11,7 @@ export const activeTodos: Evolu.Query = evolu.createQuery((db) =>
 export type TActiveTodosRow = typeof activeTodos.Row;
 
 export const settings: Evolu.Query = evolu.createQuery((db) =>
-    db.selectFrom("settings").select(["language", "theme"])
+    db.selectFrom("settings").select(["id", "language", "theme"])
 );
 
 export type TSettingsRow = typeof settings.Row;

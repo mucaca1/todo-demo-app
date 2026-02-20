@@ -28,6 +28,7 @@ import { Language, LanguageSelector } from "../components/LanguageSelector";
 import { ThemeContext } from "../context/ThemeContext";
 import { useThemeLabels } from "../hooks/useThemeLabels";
 import { useEvolu } from "../evolu-init";
+import { SettingsId } from "../evolu-db/evolu-db";
 
 export type ISettingsArgs = {
     settingRows: QueryRows
@@ -121,13 +122,15 @@ export function SettingsPage({ settingRows }: ISettingsArgs) {
                     <Stack spacing={2}>
                         <SettingRow label={t("settings.language")}>
                             <LanguageSelector value={i18n.language as Language} onChange={(e) => {
-                                i18n.changeLanguage(e);
+                                evolu.update("settings", { id: settingRows[0].id as SettingsId, language: e } );
                             }} />
                         </SettingRow>
 
                         <Select
                             value={mode}
-                            onChange={(e) => setTheme(e.target.value)}
+                            onChange={(e) => { 
+                                evolu.update("settings", { id: settingRows[0].id as SettingsId, theme: e.target.value });
+                            }}
                             input={<OutlinedInput />}
                             size="small"
                             sx={{ maxWidth: 220 }}
