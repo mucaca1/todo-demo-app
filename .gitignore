@@ -98,4 +98,6 @@ out/
 .zenflow
 .zencoder
 
+dist
+
 nul
