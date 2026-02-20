@@ -10,8 +10,15 @@ import {
     OutlinedInput,
     Select,
     MenuItem,
+    Paper,
+    Container,
+    Tabs,
+    useMediaQuery,
+    Tab,
 } from "@mui/material";
 import {
+    Lock as LockIcon,
+    Settings as SettingsIcon,
     Storage as StorageIcon,
     Key as KeyIcon,
     Warning as WarningIcon,
@@ -29,202 +36,119 @@ import { ThemeContext } from "../context/ThemeContext";
 import { useThemeLabels } from "../hooks/useThemeLabels";
 import { useEvolu } from "../evolu-init";
 import { SettingsId } from "../evolu-db/evolu-db";
+import { GeneralSettings } from "../components/settings/GeneralSettings";
+import { PrivateZone } from "../components/settings/PrivateZone";
 
 export type ISettingsArgs = {
     settingRows: QueryRows
 }
 
-export function SettingsPage({ settingRows }: ISettingsArgs) {
-    const [isLoading, setIsLoading] = useState<boolean>(true);
-    const [mnemonic, setMnemonic] = useState<string>("");
-    const { mode, setTheme, storeTheme } = useContext(ThemeContext);
-    const { t, i18n } = useTranslation();
-    const evolu = useEvolu();
-    const owner: Promise<AppOwner> = evolu.appOwner;
-    const themeLabels = useThemeLabels();
+// =============================================================================
+// Tab Panel Component
+// =============================================================================
 
-    useEffect(() => {
-        owner.then((appOwner: AppOwner) => {
-            if (appOwner.mnemonic) {
-                setMnemonic(appOwner.mnemonic.toString());
-                setIsLoading(false);
-            }
-        });
-    }, []);
+interface TabPanelProps {
+    children?: React.ReactNode;
+    index: number;
+    value: number;
+}
 
-
-    // Restore owner from mnemonic to sync data across devices.
-    const handleRestoreAppOwnerClick = () => {
-        const mnemonic = window.prompt(t("settings.mnemonic.restorePrompt"));
-        if (mnemonic == null) return;
-
-        const result = Mnemonic.from(mnemonic.trim());
-        if (!result.ok) {
-            return;
-        }
-
-        void evolu.restoreAppOwner(result.value);
-    };
-
-    const handleResetAppOwnerClick = () => {
-        if (confirm("Are you sure? This will delete all your local data.")) {
-            void evolu.resetAppOwner();
-        }
-    };
-
-
-    const handleDownloadDatabaseClick = () => {
-        void evolu.exportDatabase().then((array) => {
-            const blob = new Blob([array], {
-                type: "application/x-sqlite3",
-            });
-            const url = window.URL.createObjectURL(blob);
-            const a = document.createElement("a");
-            a.href = url;
-            a.download = "todos.sqlite3";
-            a.click();
-            window.URL.revokeObjectURL(url);
-        });
-    };
-
-    const handleCreateSharedOwnerClick = () => {
-        // Create a new random owner secret using Evolu's crypto utilities
-        const secret = createOwnerSecret({ randomBytes: createRandomBytes() });
-
-        // Create the shared owner with the secret
-        const sharedOwner = createSharedOwner(secret);
-
-        // Get the mnemonic for sharing
-        const sharedMnemonic = sharedOwner.id.toString();
-
-        // Display the mnemonic to the user for sharing
-        window.prompt(
-            t("settings.mnemonic.shareInstruction"),
-            sharedMnemonic
-        );
-    };
+const TabPanel: React.FC<TabPanelProps> = ({ children, value, index }) => {
+    if (value !== index) return null;
 
     return (
-        <Box sx={{ maxWidth: 720, mx: "auto", p: 3 }}>
-            <Typography variant="h4" gutterBottom>
-                {t("settings.title")}
-            </Typography>
-
-            {/* Data */}
-            <Card sx={{ mb: 3 }}>
-                <CardContent>
-                    <Stack direction="row" alignItems="center" spacing={1} sx={{ mb: 1 }}>
-                        <StorageIcon color="primary" />
-                        <Typography variant="h6">{t("settings.sections.data")}</Typography>
-                    </Stack>
-                    <Divider sx={{ my: 2 }} />
-
-                    <Stack spacing={2}>
-                        <SettingRow label={t("settings.language")}>
-                            <LanguageSelector value={i18n.language as Language} onChange={(e) => {
-                                evolu.update("settings", { id: settingRows[0].id as SettingsId, language: e } );
-                            }} />
-                        </SettingRow>
-
-                        <Select
-                            value={mode}
-                            onChange={(e) => { 
-                                evolu.update("settings", { id: settingRows[0].id as SettingsId, theme: e.target.value });
-                            }}
-                            input={<OutlinedInput />}
-                            size="small"
-                            sx={{ maxWidth: 220 }}
-                            fullWidth
-                        >
-                            {Object.entries(themeLabels).map(([key, label]) => (
-                                <MenuItem key={key} value={key}>
-                                    {label}
-                                </MenuItem>
-                            ))}
-                        </Select>
-                        
-                    </Stack>
-                </CardContent>
-            </Card>
-
-            {/* Owner */}
-            <Card sx={{ mb: 3 }}>
-                <CardContent>
-                    <Stack direction="row" alignItems="center" spacing={1} sx={{ mb: 1 }}>
-                        <KeyIcon color="primary" />
-                        <Typography variant="h6">{t("settings.sections.owner")}</Typography>
-                    </Stack>
-                    <Divider sx={{ my: 2 }} />
-
-                    <Stack spacing={2}>
-                        <SecretReadOnlyField
-                            fieldName={t("settings.mnemonic.label")}
-                            loading={isLoading}
-                            secretValue={mnemonic}
-                        />
-
-                        <Typography variant="body2" color="text.secondary">
-                            {t("settings.importOwnerWarning")}
-                        </Typography>
-
-                        <Button
-                            onClick={handleDownloadDatabaseClick}
-                            variant="outlined"
-                            startIcon={<DownloadIcon />}
-                        >
-                            {t("settings.downloadDatabase")}
-                        </Button>
-
-                        <Button
-                            onClick={handleCreateSharedOwnerClick}
-                            variant="outlined"
-                            startIcon={<GroupAddIcon />}
-                        >
-                            {t("settings.createSharedOwner")}
-                        </Button>
-                    </Stack>
-                </CardContent>
-            </Card>
-
-            {/* Danger Zone */}
-            <Card sx={{ border: "1px solid", borderColor: "error.main" }}>
-                <CardContent>
-                    <Stack direction="row" alignItems="center" spacing={1} sx={{ mb: 1 }}>
-                        <WarningIcon color="error" />
-                        <Typography variant="h6" color="error">
-                            {t("settings.sections.dangerZone")}
-                        </Typography>
-                    </Stack>
-
-                    <Divider sx={{ my: 2 }} />
-                    <Typography variant="body2" sx={{ mb: 2 }}>
-                        {t("settings.restoreOwnerWarning")}
-                    </Typography>
-                    <Button
-                        onClick={handleRestoreAppOwnerClick}
-                        fullWidth
-                        variant="outlined"
-                        color="warning"
-                        startIcon={<RestoreIcon />}
-                    >
-                        {t("settings.restoreAppOwner")}
-                    </Button>
-                    <Divider sx={{ my: 2 }} />
-
-                    <Typography variant="body2" sx={{ mb: 2 }}>
-                        {t("settings.deleteAccountWarning")}
-                    </Typography>
-                    <Button
-                        fullWidth
-                        variant="contained"
-                        color="error"
-                        onClick={handleResetAppOwnerClick}
-                        startIcon={<DeleteForeverIcon />}
-                    >
-                        {t("settings.deleteAccount")}
-                    </Button>
-                </CardContent>
-            </Card>
+        <Box
+            role="tabpanel"
+            id={`settings-tabpanel-${index}`}
+            aria-labelledby={`settings-tab-${index}`}
+            sx={{ py: 3 }}
+        >
+            {children}
         </Box>
+    );
+};
+
+// =============================================================================
+// Tab Configuration
+// =============================================================================
+
+interface TabConfig {
+    label: string;
+    icon: React.ReactElement;
+    component: React.ReactNode;
+}
+
+export function SettingsPage({ settingRows }: ISettingsArgs) {
+    const { t } = useTranslation();
+    const evolu = useEvolu();
+
+    const [activeTab, setActiveTab] = useState(0);
+
+    const tabs: TabConfig[] = [
+        {
+            label: t("settings.general"),
+            icon: <SettingsIcon />,
+            component: <GeneralSettings settingRows={settingRows} />,
+        },
+        {
+            label: t("settings.privateZone"),
+            icon: <LockIcon />,
+            component: <PrivateZone />,
+        },
+    ];
+
+    const handleTabChange = (_event: React.SyntheticEvent, newValue: number) => {
+        setActiveTab(newValue);
+    };
+    return (
+        <Container maxWidth="lg" sx={{ py: 3 }}>
+      {/* Header */}
+      <Box sx={{ mb: 3 }}>
+        <Typography variant="h4" gutterBottom>
+          {t("settings.title")}
+        </Typography>
+      </Box>
+
+      {/* Tabs Container */}
+      <Paper sx={{ borderRadius: 2, overflow: "hidden" }}>
+        {/* Tabs Header */}
+        <Box
+          sx={{
+            borderBottom: 1,
+            borderColor: "divider",
+            bgcolor: "background.default",
+          }}
+        >
+          <Tabs
+            value={activeTab}
+            onChange={handleTabChange}
+            aria-label="settings tabs"
+            sx={{
+              "& .MuiTab-root": {
+                minHeight: 64,
+              },
+            }}
+          >
+            {tabs.map((tab, index) => (
+              <Tab
+                key={index}
+                icon={tab.icon}
+                iconPosition="start"
+                label={tab.label}
+                id={`settings-tab-${index}`}
+                aria-controls={`settings-tabpanel-${index}`}
+              />
+            ))}
+          </Tabs>
+        </Box>
+
+        {/* Tab Content */}
+        <Box sx={{ p: { xs: 2, sm: 3 } }}>
+          <TabPanel value={activeTab} index={activeTab}>
+            {tabs[activeTab]?.component}
+          </TabPanel>
+        </Box>
+      </Paper>
+    </Container>
     );
 }

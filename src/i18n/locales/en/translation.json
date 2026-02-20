@@ -49,7 +49,11 @@
             "label": "Mnemonic",
             "restorePrompt": "Enter your mnemonic to restore your data:",
             "shareInstruction": "Share this mnemonic with others to give them access to your data:"
-        }
+        },
+        "privateZone": "Private",
+        "general": "General",
+        "appearance": "Appearance",
+        "theme": "Theme"
     },
     "welcome": {
         "greeting": "Welcome 👋",

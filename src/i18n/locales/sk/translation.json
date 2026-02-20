@@ -49,7 +49,10 @@
             "label": "Mnemonic",
             "restorePrompt": "Zadajte svoj mnemonic pre obnovenie vašich dát:",
             "shareInstruction": "Zdieľajte tento mnemonic s ostatnými, aby ste im dali prístup k vašim dátom:"
-        }
+        },
+        "privateZone": "Súkromie",
+        "general": "Všeobecné",
+        "appearance": "Vzhľad"
     },
     "welcome": {
         "greeting": "Vitajte 👋",
