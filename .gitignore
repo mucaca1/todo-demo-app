@@ -93,3 +93,7 @@ out/
 
 # Claude folder
 .claude
+
+# Zenflow folder
+.zenflow
+.zencoder
