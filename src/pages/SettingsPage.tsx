@@ -11,6 +11,15 @@ import {
     Select,
     MenuItem,
 } from "@mui/material";
+import {
+    Storage as StorageIcon,
+    Key as KeyIcon,
+    Warning as WarningIcon,
+    Download as DownloadIcon,
+    GroupAdd as GroupAddIcon,
+    Restore as RestoreIcon,
+    DeleteForever as DeleteForeverIcon,
+} from "@mui/icons-material";
 import { useTranslation } from "react-i18next";
 import { SecretReadOnlyField } from "../components/SecretReadOnlyField";
 import { AppOwner, Mnemonic, QueryRows, createSharedOwner, createOwnerSecret, createRandomBytes } from "@evolu/common";
@@ -103,7 +112,10 @@ export function SettingsPage({ settingRows }: ISettingsArgs) {
             {/* Data */}
             <Card sx={{ mb: 3 }}>
                 <CardContent>
-                    <Typography variant="h6">{t("settings.sections.data")}</Typography>
+                    <Stack direction="row" alignItems="center" spacing={1} sx={{ mb: 1 }}>
+                        <StorageIcon color="primary" />
+                        <Typography variant="h6">{t("settings.sections.data")}</Typography>
+                    </Stack>
                     <Divider sx={{ my: 2 }} />
 
                     <Stack spacing={2}>
@@ -135,7 +147,10 @@ export function SettingsPage({ settingRows }: ISettingsArgs) {
             {/* Owner */}
             <Card sx={{ mb: 3 }}>
                 <CardContent>
-                    <Typography variant="h6">{t("settings.sections.owner")}</Typography>
+                    <Stack direction="row" alignItems="center" spacing={1} sx={{ mb: 1 }}>
+                        <KeyIcon color="primary" />
+                        <Typography variant="h6">{t("settings.sections.owner")}</Typography>
+                    </Stack>
                     <Divider sx={{ my: 2 }} />
 
                     <Stack spacing={2}>
@@ -149,9 +164,21 @@ export function SettingsPage({ settingRows }: ISettingsArgs) {
                             {t("settings.importOwnerWarning")}
                         </Typography>
 
-                        <Button onClick={handleDownloadDatabaseClick} variant="outlined">{t("settings.downloadDatabase")}</Button>
+                        <Button
+                            onClick={handleDownloadDatabaseClick}
+                            variant="outlined"
+                            startIcon={<DownloadIcon />}
+                        >
+                            {t("settings.downloadDatabase")}
+                        </Button>
 
-                        <Button onClick={handleCreateSharedOwnerClick}>{t("settings.createSharedOwner")}</Button>
+                        <Button
+                            onClick={handleCreateSharedOwnerClick}
+                            variant="outlined"
+                            startIcon={<GroupAddIcon />}
+                        >
+                            {t("settings.createSharedOwner")}
+                        </Button>
                     </Stack>
                 </CardContent>
             </Card>
@@ -159,15 +186,24 @@ export function SettingsPage({ settingRows }: ISettingsArgs) {
             {/* Danger Zone */}
             <Card sx={{ border: "1px solid", borderColor: "error.main" }}>
                 <CardContent>
-                    <Typography variant="h6" color="error">
-                        {t("settings.sections.dangerZone")}
-                    </Typography>
+                    <Stack direction="row" alignItems="center" spacing={1} sx={{ mb: 1 }}>
+                        <WarningIcon color="error" />
+                        <Typography variant="h6" color="error">
+                            {t("settings.sections.dangerZone")}
+                        </Typography>
+                    </Stack>
 
                     <Divider sx={{ my: 2 }} />
                     <Typography variant="body2" sx={{ mb: 2 }}>
                         {t("settings.restoreOwnerWarning")}
                     </Typography>
-                    <Button onClick={handleRestoreAppOwnerClick} fullWidth variant="outlined">
+                    <Button
+                        onClick={handleRestoreAppOwnerClick}
+                        fullWidth
+                        variant="outlined"
+                        color="warning"
+                        startIcon={<RestoreIcon />}
+                    >
                         {t("settings.restoreAppOwner")}
                     </Button>
                     <Divider sx={{ my: 2 }} />
@@ -180,6 +216,7 @@ export function SettingsPage({ settingRows }: ISettingsArgs) {
                         variant="contained"
                         color="error"
                         onClick={handleResetAppOwnerClick}
+                        startIcon={<DeleteForeverIcon />}
                     >
                         {t("settings.deleteAccount")}
                     </Button>

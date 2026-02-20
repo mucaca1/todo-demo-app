@@ -55,15 +55,25 @@ Implemented mnemonic blur effect and multiline display in `src/components/Secret
 
 ---
 
-### [ ] Step: Add Icons to SettingsPage
+### [x] Step: Add Icons to SettingsPage
+<!-- chat-id: 3ee16f59-c2da-42ab-8f52-8999eca7dd7a -->
 
-Enhance visual hierarchy in `src/pages/SettingsPage.tsx` with icons.
+Enhanced visual hierarchy in `src/pages/SettingsPage.tsx` with icons.
 
-- Add section header icons: StorageIcon (Data), KeyIcon (Owner), WarningIcon (Danger Zone)
-- Add button icons: DownloadIcon, GroupAddIcon, RestoreIcon, DeleteForeverIcon
-- Improve card styling with better spacing
-
-**Verification**: Visual check of all icons, alignment, theme compatibility
+**Changes Made**:
+- Added section header icons with Stack layout:
+  - StorageIcon (primary color) for Data section
+  - KeyIcon (primary color) for Owner section
+  - WarningIcon (error color) for Danger Zone section
+- Added button startIcon props:
+  - DownloadIcon for "Download Database" button
+  - GroupAddIcon for "Create Shared Owner" button
+  - RestoreIcon for "Restore App Owner" button (color: warning)
+  - DeleteForeverIcon for "Delete Account" button (color: error)
+- Improved styling:
+  - Changed "Create Shared Owner" button to `variant="outlined"` for consistency
+  - Added `color="warning"` to Restore button for better visual hierarchy in Danger Zone
+- Build verified: `npx vite build --mode development` completed successfully
 
 ---
 
