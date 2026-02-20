@@ -20,50 +20,65 @@ If you are blocked and need user clarification, mark the current step with `[!]`
 
 ## Workflow Steps
 
-### [ ] Step: Technical Specification
+### [x] Step: Technical Specification
+<!-- chat-id: b0962cd8-36b7-41e0-ade5-6f00ca0be614 -->
 
-Assess the task's difficulty, as underestimating it leads to poor outcomes.
-- easy: Straightforward implementation, trivial bug fix or feature
-- medium: Moderate complexity, some edge cases or caveats to consider
-- hard: Complex logic, many caveats, architectural considerations, or high-risk changes
+Technical specification completed and saved to `.zenflow/tasks/new-task-44c7/spec.md`.
 
-Create a technical specification for the task that is appropriate for the complexity level:
-- Review the existing codebase architecture and identify reusable components.
-- Define the implementation approach based on established patterns in the project.
-- Identify all source code files that will be created or modified.
-- Define any necessary data model, API, or interface changes.
-- Describe verification steps using the project's test and lint commands.
+**Assessment**: Medium difficulty - Moderate complexity with styling enhancements and component modifications. No architectural changes needed.
 
-Save the output to `{@artifacts_path}/spec.md` with:
-- Technical context (language, dependencies)
-- Implementation approach
-- Source code structure changes
-- Data model / API / interface changes
-- Verification approach
-
-If the task is complex enough, create a detailed implementation plan based on `{@artifacts_path}/spec.md`:
-- Break down the work into concrete tasks (incrementable, testable milestones)
-- Each task should reference relevant contracts and include verification steps
-- Replace the Implementation step below with the planned tasks
-
-Rule of thumb for step size: each step should represent a coherent unit of work (e.g., implement a component, add an API endpoint, write tests for a module). Avoid steps that are too granular (single function).
-
-Important: unit tests must be part of each implementation task, not separate tasks. Each task should implement the code and its tests together, if relevant.
-
-Save to `{@artifacts_path}/plan.md`. If the feature is trivial and doesn't warrant this breakdown, keep the Implementation step below as is.
+**Key Findings**:
+- Project uses React 19 + TypeScript with Material-UI v7.1.2
+- `SecretReadOnlyField` component needs blur effect and multiline display
+- SettingsPage and TodoPage can be enhanced with icons
+- All changes are visual/styling only - low risk
 
 ---
 
-### [ ] Step: Implementation
+### [ ] Step: Enhance SecretReadOnlyField Component
 
-Implement the task according to the technical specification and general engineering best practices.
+Implement mnemonic blur effect and multiline display in `src/components/SecretReadOnlyField.tsx`.
 
-1. Break the task into steps where possible.
-2. Implement the required changes in the codebase
-3. If relevant, write unit tests alongside each change.
-4. Run relevant tests and linters in the end of each step.
-5. Perform basic manual verification if applicable.
-6. After completion, write a report to `{@artifacts_path}/report.md` describing:
-   - What was implemented
-   - How the solution was tested
-   - The biggest issues or challenges encountered
+- Add CSS blur filter when mnemonic is hidden (`filter: blur(8px)`)
+- Add smooth transition animation between hidden/shown states
+- Implement multiline display when shown (format mnemonic into word groups)
+- Add `userSelect: none` when blurred to prevent copying hidden content
+- Update TypeScript interface with new optional props (multiline, blurIntensity, wordsPerLine)
+
+**Verification**: Test blur toggle, multiline display, copy functionality, both themes
+
+---
+
+### [ ] Step: Add Icons to SettingsPage
+
+Enhance visual hierarchy in `src/pages/SettingsPage.tsx` with icons.
+
+- Add section header icons: StorageIcon (Data), KeyIcon (Owner), WarningIcon (Danger Zone)
+- Add button icons: DownloadIcon, GroupAddIcon, RestoreIcon, DeleteForeverIcon
+- Improve card styling with better spacing
+
+**Verification**: Visual check of all icons, alignment, theme compatibility
+
+---
+
+### [ ] Step: Add Icons to TodoPage
+
+Enhance visual appeal in `src/pages/TodoPage.tsx` with icons.
+
+- Add section header icons: CheckBoxOutlineBlankIcon (Active), CheckBoxIcon (Finished)
+- Add button icons: AddIcon for add todo button
+- Improve empty state visuals
+
+**Verification**: Visual check, responsive behavior, both themes
+
+---
+
+### [ ] Step: Final Verification and Report
+
+Run full verification and create implementation report.
+
+- Run type checking: `npm run type-check`
+- Run linting: `npm run lint`
+- Run build: `npm run build`
+- Manual testing of all visual changes
+- Write report to `.zenflow/tasks/new-task-44c7/report.md`
