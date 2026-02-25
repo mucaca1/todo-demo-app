@@ -13,9 +13,9 @@ import {
     OutlinedInput,
     MenuItem,
 } from "@mui/material";
-import { Language, LanguageSelector } from "../components/LanguageSelector";
+import { Language } from "../types";
+import { LanguageSelector, SettingRow } from "../components/ui";
 import { ThemeContext } from "../context/ThemeContext";
-import { SettingRow } from "../components/FieldRow";
 import { useTranslation } from "react-i18next";
 import { useEvolu } from "../evolu-init";
 import { useThemeLabels } from "../hooks/useThemeLabels";

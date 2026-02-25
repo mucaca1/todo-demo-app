@@ -1,5 +1,5 @@
 import { useTranslation } from "react-i18next";
-import { ThemeMode } from "../themes";
+import { ThemeMode } from "../themes/index";
 
 export function useThemeLabels(): Record<ThemeMode, string> {
     const { t } = useTranslation();

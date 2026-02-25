@@ -1,5 +1,5 @@
 import { BrowserRouter, Route, Routes } from "react-router-dom";
-import { MenuBar } from "../components/MenuBar";
+import { MenuBar } from "../components/layout";
 import { Suspense } from "react";
 import TodoPage from "./TodoPage";
 import { SettingsPage } from "./SettingsPage";

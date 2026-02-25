@@ -1,137 +1,80 @@
-import React, { useEffect, useState } from "react";
-import {
-    Box,
-    Button,
-    Checkbox,
-    Collapse,
-    Dialog,
-    DialogActions,
-    DialogContent,
-    DialogTitle,
-    IconButton,
-    List,
-    ListItem,
-    ListItemSecondaryAction,
-    ListItemText,
-    Stack,
-    TextField,
-    Typography,
-} from "@mui/material";
-import EditIcon from "@mui/icons-material/Edit";
-import DeleteIcon from "@mui/icons-material/Delete";
+import React, { useState } from "react";
+import { Box, Button, Stack, Typography } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
 import CheckBoxOutlineBlankIcon from "@mui/icons-material/CheckBoxOutlineBlank";
 import CheckBoxIcon from "@mui/icons-material/CheckBox";
 import PlaylistAddCheckIcon from "@mui/icons-material/PlaylistAddCheck";
-import { useQuery } from "@evolu/react";
-import { DateIso, QueryRows } from "@evolu/common";
-import { TodoId } from "./../evolu-db/evolu-db"
-import { activeTodos, TActiveTodosRow } from "../evolu-db/evolu-query";
-import { useEvolu } from "../evolu-init";
+import { QueryRows } from "@evolu/common";
+import { TodoId, Todo } from "../types/todo";
+import { TActiveTodosRow } from "../evolu-db/evolu-query";
+import { useTodoService } from "../services";
 import { useTranslation } from "react-i18next";
+import { TodoList, TodoForm } from "../components/todo";
 
 export type IPageArgs = {
-    todoRows: QueryRows
-}
-
-export type Todo = {
-    id: TodoId;
-    title: string;
-    description: string;
-    done: boolean;
-    finishedAt?: Date;
+    todoRows: QueryRows;
 };
 
-export default function TodoPage({todoRows} : IPageArgs) {
-    const { insert, update } = useEvolu();
+export default function TodoPage({ todoRows }: IPageArgs) {
+    const { createTodo, updateTodo, toggleComplete, deleteTodo } = useTodoService();
     const { t } = useTranslation();
-    const [showAllFinished, setShowAllFinished] = useState(false);
     const [openForm, setOpenForm] = useState(false);
     const [editing, setEditing] = useState<Todo | null>(null);
-    const [title, setTitle] = useState("");
-    const [description, setDescription] = useState("");
-    const [todos, setTodos] = useState<Todo[]>([]);
-    //const result: QueryRows<TActiveTodosRow> = useQuery(activeTodos);
+
+    // Separate todos into active and finished lists
     const finished: Array<Todo> = [];
-    const todoToWork: Array<Todo> = [];
+    const activeTodos: Array<Todo> = [];
     todoRows.forEach((row: TActiveTodosRow) => {
+        const todo: Todo = {
+            id: row.id as TodoId,
+            title: row.title as string,
+            description: row.description as string,
+            done: row.isCompleted ? true : false,
+        };
         if (row.isCompleted) {
-            finished.push({
-                id: row.id as TodoId,
-                title: row.title as string,
-                description: row.description as string,
-                done: row.isCompleted ? true : false
-            });
+            finished.push(todo);
         } else {
-            todoToWork.push({
-                id: row.id as TodoId,
-                title: row.title as string,
-                description: row.description as string,
-                done: row.isCompleted ? true : false
-            });
+            activeTodos.push(todo);
         }
     });
 
-    const resetForm = () => {
-        setTitle("");
-        setDescription("");
-        setEditing(null);
-    };
-
     const openAdd = () => {
-        resetForm();
+        setEditing(null);
         setOpenForm(true);
     };
 
     const openEdit = (todo: Todo) => {
         setEditing(todo);
-        setTitle(todo.title);
-        setDescription(todo.description);
         setOpenForm(true);
     };
 
-    const saveTodo = () => {
-        if (!title.trim()) return;
-
-
+    const handleSave = (title: string, description: string) => {
         if (editing) {
-            const result = update("todo", {
-                id: editing.id,
-                isCompleted: 1,
+            updateTodo(editing.id, {
+                title,
+                description: description || undefined,
             });
-            if (!result.ok) {
-                console.log(result.error.value);
-            }
-            console.log("Record updated.")
         } else {
-            const result = insert("todo", {
-                title: title,
-                description: description,
-                isCompleted: 0
-            })
-            if (!result.ok) {
-                console.log(result.error.value);
-            }
-            console.log("Record created.")
+            createTodo({
+                title,
+                description: description || undefined,
+            });
         }
-
         setOpenForm(false);
-        resetForm();
+        setEditing(null);
     };
 
-    const toggleDone = (id: TodoId, lastValue: boolean) => {
-        if (!lastValue) {
-            const dateResult = DateIso.from(new Date().toISOString());
-            if (dateResult.ok) {
-                update("todo", { id: id, isCompleted: lastValue ? 0 : 1 , completeAt: dateResult.value})
-            }
-        } else {
-            update("todo", { id: id, isCompleted: lastValue ? 0 : 1, completeAt: null })
-        }
+    const handleToggle = (id: TodoId, currentValue: boolean) => {
+        toggleComplete(id, !currentValue);
     };
 
-    const removeTodo = (id: TodoId) => {
-        update("todo", {id: id, isDeleted: 1})
+    const handleDelete = (id: TodoId) => {
+        deleteTodo(id);
+    };
+
+    const handleCloseForm = () => {
+        setOpenForm(false);
+        setEditing(null);
     };
 
     return (
@@ -146,116 +89,34 @@ export default function TodoPage({todoRows} : IPageArgs) {
                 </Button>
             </Stack>
 
-            <Stack direction="row" alignItems="center" spacing={1} mb={1}>
-                <CheckBoxOutlineBlankIcon color="primary" />
-                <Typography variant="h6">{t("todo.active")}</Typography>
-            </Stack>
-            <List>
-                {todoToWork.map((todo) => (
-                    <Collapse key={todo.id} in timeout={300}>
-                        <ListItem key={todo.id} divider>
-                            <Checkbox
-                                checked={todo.done}
-                                onChange={() => toggleDone(todo.id, todo.done)}
-                            />
-                            <ListItemText
-                                primary={todo.title}
-                                secondary={todo.description}
-                            />
-                            <ListItemSecondaryAction>
-                                <IconButton onClick={() => openEdit(todo)}>
-                                    <EditIcon />
-                                </IconButton>
-                                <IconButton onClick={() => removeTodo(todo.id)}>
-                                    <DeleteIcon />
-                                </IconButton>
-                            </ListItemSecondaryAction>
-                        </ListItem>
-                    </Collapse>
-                ))}
-                {todoToWork.length === 0 && (
-                    <Typography
-                        color="text.secondary"
-                        px={2}
-                        py={3}
-                        textAlign="center"
-                        sx={{
-                            fontStyle: 'italic',
-                            opacity: 0.7
-                        }}
-                    >
-                        {t("todo.noActiveTodos")}
-                    </Typography>
-                )}
-            </List>
+            <TodoList
+                title={t("todo.active")}
+                titleIcon={CheckBoxOutlineBlankIcon}
+                titleIconColor="primary"
+                todos={activeTodos}
+                onToggle={handleToggle}
+                onEdit={openEdit}
+                onDelete={handleDelete}
+                emptyMessage={t("todo.noActiveTodos")}
+            />
 
-            <Stack direction="row" justifyContent="space-between" alignItems="center" mb={2}>
-                <Stack direction="row" alignItems="center" spacing={1}>
-                    <CheckBoxIcon color="success" />
-                    <Typography variant="h6">{t("todo.finished")}</Typography>
-                </Stack>
-                {finished.length > 3 && (
-                    <Button
-                        size="small"
-                        onClick={() => setShowAllFinished((v) => !v)}
-                    >
-                        {showAllFinished ? t("todo.showLast3") : t("todo.showAllTodos")}
-                    </Button>
-                )}
-            </Stack>
+            <TodoList
+                title={t("todo.finished")}
+                titleIcon={CheckBoxIcon}
+                titleIconColor="success"
+                todos={finished}
+                onToggle={handleToggle}
+                onEdit={openEdit}
+                onDelete={handleDelete}
+                initialVisibleCount={3}
+            />
 
-            <List>
-                {finished.slice(0, showAllFinished ? finished.length : 3).map((todo) => (
-                    <Collapse key={todo.id} in timeout={300}>
-                        <ListItem divider>
-                            <Checkbox
-                                checked={todo.done}
-                                onChange={() => toggleDone(todo.id, todo.done)}
-                            />
-                            <ListItemText
-                                primary={todo.title}
-                                secondary={todo.description}
-                            />
-                            <ListItemSecondaryAction>
-                                <IconButton onClick={() => openEdit(todo)}>
-                                    <EditIcon />
-                                </IconButton>
-                                <IconButton onClick={() => removeTodo(todo.id)}>
-                                    <DeleteIcon />
-                                </IconButton>
-                            </ListItemSecondaryAction>
-                        </ListItem>
-                    </Collapse>
-                ))}
-            </List>
-
-            <Dialog open={openForm} onClose={() => setOpenForm(false)} fullWidth>
-                <DialogTitle>{editing ? t("todo.editTodo") : t("todo.newTodo")}</DialogTitle>
-                <DialogContent>
-                    <Stack spacing={2} mt={1}>
-                        <TextField
-                            label={t("todo.form.title")}
-                            value={title}
-                            onChange={(e) => setTitle(e.target.value)}
-                            required
-                            autoFocus
-                        />
-                        <TextField
-                            label={t("todo.form.description")}
-                            value={description}
-                            onChange={(e) => setDescription(e.target.value)}
-                            multiline
-                            minRows={3}
-                        />
-                    </Stack>
-                </DialogContent>
-                <DialogActions>
-                    <Button onClick={() => setOpenForm(false)}>{t("common.cancel")}</Button>
-                    <Button variant="contained" onClick={saveTodo}>
-                        {t("common.save")}
-                    </Button>
-                </DialogActions>
-            </Dialog>
+            <TodoForm
+                open={openForm}
+                editingTodo={editing}
+                onSave={handleSave}
+                onClose={handleCloseForm}
+            />
         </Box>
     );
 }

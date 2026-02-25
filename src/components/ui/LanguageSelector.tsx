@@ -1,7 +1,6 @@
 import { MenuItem, OutlinedInput, Select } from "@mui/material";
 import { useTranslation } from "react-i18next";
-
-export type Language = "en" | "sk";
+import { Language } from "../../types";
 
 export function LanguageSelector({
     value,

@@ -1,41 +1,18 @@
-import { useContext, useEffect, useState } from "react";
+import { useState } from "react";
 import {
     Box,
     Typography,
-    Card,
-    CardContent,
-    Divider,
-    Button,
-    Stack,
-    OutlinedInput,
-    Select,
-    MenuItem,
     Paper,
     Container,
     Tabs,
-    useMediaQuery,
     Tab,
 } from "@mui/material";
 import {
     Lock as LockIcon,
     Settings as SettingsIcon,
-    Storage as StorageIcon,
-    Key as KeyIcon,
-    Warning as WarningIcon,
-    Download as DownloadIcon,
-    GroupAdd as GroupAddIcon,
-    Restore as RestoreIcon,
-    DeleteForever as DeleteForeverIcon,
 } from "@mui/icons-material";
 import { useTranslation } from "react-i18next";
-import { SecretReadOnlyField } from "../components/SecretReadOnlyField";
-import { AppOwner, Mnemonic, QueryRows, createSharedOwner, createOwnerSecret, createRandomBytes } from "@evolu/common";
-import { SettingRow } from "../components/FieldRow";
-import { Language, LanguageSelector } from "../components/LanguageSelector";
-import { ThemeContext } from "../context/ThemeContext";
-import { useThemeLabels } from "../hooks/useThemeLabels";
-import { useEvolu } from "../evolu-init";
-import { SettingsId } from "../evolu-db/evolu-db";
+import { QueryRows } from "@evolu/common";
 import { GeneralSettings } from "../components/settings/GeneralSettings";
 import { PrivateZone } from "../components/settings/PrivateZone";
 
@@ -80,8 +57,6 @@ interface TabConfig {
 
 export function SettingsPage({ settingRows }: ISettingsArgs) {
     const { t } = useTranslation();
-    const evolu = useEvolu();
-
     const [activeTab, setActiveTab] = useState(0);
 
     const tabs: TabConfig[] = [

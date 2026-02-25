@@ -14,7 +14,7 @@ import {
     Restore as RestoreIcon,
     DeleteForever as DeleteForeverIcon,
 } from "@mui/icons-material";
-import { SecretReadOnlyField } from "../SecretReadOnlyField";
+import { SecretReadOnlyField } from "../ui";
 
 export function PrivateZone() {
 

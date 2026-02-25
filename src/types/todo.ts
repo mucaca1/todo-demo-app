@@ -1,0 +1,40 @@
+/**
+ * Todo-related types
+ */
+
+import { TodoId } from '../evolu-db/evolu-db';
+
+/**
+ * Todo item representation for UI display
+ */
+export interface Todo {
+    id: TodoId;
+    title: string;
+    description: string;
+    done: boolean;
+    finishedAt?: Date;
+}
+
+/**
+ * Data for creating a new todo
+ */
+export interface TodoCreateInput {
+    title: string;
+    description?: string;
+}
+
+/**
+ * Data for updating an existing todo
+ */
+export interface TodoUpdateInput {
+    title?: string;
+    description?: string;
+    isCompleted?: number;
+    completeAt?: string | null;
+    isDeleted?: number;
+}
+
+/**
+ * Re-export TodoId from evolu-db for convenience
+ */
+export type { TodoId };

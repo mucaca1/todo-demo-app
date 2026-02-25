@@ -1,8 +1,8 @@
 import { Box, Card, CardContent, Divider, FormControl, Grid, InputLabel, MenuItem, OutlinedInput, Paper, Select, Stack, Typography } from "@mui/material";
-import { Language, LanguageSelector } from "../LanguageSelector";
-import { SettingsId } from "../../evolu-db/evolu-db";
-import { themeLabels } from "../../themes";
-import { useEvolu } from "../../evolu-init";
+import { Language } from "../../types";
+import { SettingsId } from "../../types/settings";
+import { themeLabels } from "../../themes/index";
+import { useSettingsService } from "../../services";
 import {
     Palette as PaletteIcon,
     Lock as LockIcon,
@@ -19,7 +19,6 @@ import { useContext, useState } from "react";
 import { ThemeContext } from "../../context/ThemeContext";
 import { useTranslation } from "react-i18next";
 import { QueryRows } from "@evolu/common";
-import { SettingRow } from "../FieldRow";
 
 
 // =============================================================================
@@ -51,7 +50,7 @@ export type ISettingsArgs = {
 }
 
 export function GeneralSettings({settingRows} : ISettingsArgs) {
-    const evolu = useEvolu();
+    const { updateLanguage, updateTheme } = useSettingsService();
     const { mode, setTheme, storeTheme } = useContext(ThemeContext);
     const { t, i18n } = useTranslation();
 
@@ -59,7 +58,7 @@ export function GeneralSettings({settingRows} : ISettingsArgs) {
             en: t("language.english"),
             sk: t("language.slovak"),
         };
-    
+
     return (<div>
         <SettingSection
             title={t("settings.appearance")}
@@ -73,7 +72,7 @@ export function GeneralSettings({settingRows} : ISettingsArgs) {
                         <Select
                             value={i18n.language as Language}
                             onChange={(e) => {
-                                evolu.update("settings", { id: settingRows[0].id as SettingsId, language: e.target.value as any });
+                                updateLanguage(settingRows[0].id as SettingsId, e.target.value as Language);
                             }}
                             label={t("settings.language")}
                         >
@@ -93,7 +92,7 @@ export function GeneralSettings({settingRows} : ISettingsArgs) {
                         <Select
                             value={mode}
                             onChange={(e) => {
-                                evolu.update("settings", { id: settingRows[0].id as SettingsId, theme: e.target.value });
+                                updateTheme(settingRows[0].id as SettingsId, e.target.value as any);
                             }}
                             label={t("settings.theme")}
                         >
