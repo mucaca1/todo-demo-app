@@ -2,7 +2,7 @@
  * Settings-related types
  */
 
-import { SettingsId } from '../evolu-db/evolu-db';
+import { SettingsId } from '../evolu/evolu-db';
 import { Language, ThemeMode } from './common';
 
 /**

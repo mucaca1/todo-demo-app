@@ -1,6 +1,6 @@
 import { createEvolu, getOrThrow, SimpleName } from "@evolu/common";
 import { evoluReactWebDeps } from "@evolu/react-web";
-import { Schema } from "./evolu-db/evolu-db";
+import { Schema } from "./evolu/evolu-db";
 import { createUseEvolu } from "@evolu/react";
 
 export const evolu = createEvolu(evoluReactWebDeps)(Schema, {

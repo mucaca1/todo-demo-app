@@ -124,7 +124,7 @@ export function SecretReadOnlyField({
             ) : (
                 // Single line with blur effect (original style or when hidden)
                 <OutlinedInput
-                    value={showSecret ? secretValue : t('secret.hiddenPlaceholder')}
+                    value={secretValue}
                     id="secret-context-content"
                     type={"text"}
                     disabled={loading}

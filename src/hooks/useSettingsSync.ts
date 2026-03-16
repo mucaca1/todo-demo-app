@@ -14,7 +14,7 @@ import { useContext, useEffect, useCallback } from "react";
 import { useTranslation } from "react-i18next";
 import { useQueries } from "@evolu/react";
 import { ThemeContext } from "../context/ThemeContext";
-import { activeTodos, settings } from "../evolu-db/evolu-query";
+import { activeTodos, settings } from "../evolu/evolu-query";
 import { Language } from "../types/common";
 import { ThemeMode } from "../types/common";
 

@@ -2,7 +2,7 @@
  * Todo-related types
  */
 
-import { TodoId } from '../evolu-db/evolu-db';
+import { TodoId } from '../evolu/evolu-db';
 
 /**
  * Todo item representation for UI display
