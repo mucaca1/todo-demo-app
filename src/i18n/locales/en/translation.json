@@ -5,6 +5,7 @@
         "home": "Home",
         "settings": "Settings",
         "save": "Save",
+        "saving": "Saving...",
         "cancel": "Cancel",
         "back": "Back",
         "next": "Next",
@@ -54,7 +55,16 @@
         "general": "General",
         "tags": "Tags",
         "appearance": "Appearance",
-        "theme": "Theme"
+        "theme": "Theme",
+        "database": {
+            "title": "Database Connection",
+            "syncUrl": "Sync URL",
+            "syncUrlHelper": "Enter the Evolu sync server URL to enable cloud synchronization",
+            "notConfigured": "Not configured - local data only",
+            "configured": "Connected to sync server",
+            "saved": "Settings saved successfully",
+            "clear": "Clear"
+        }
     },
     "tags": {
         "title": "Manage Tags",

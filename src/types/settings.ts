@@ -12,6 +12,7 @@ export interface Settings {
     id: SettingsId;
     language: Language;
     theme: ThemeMode;
+    syncUrl: string | null;
 }
 
 /**
@@ -20,6 +21,7 @@ export interface Settings {
 export interface SettingsCreateInput {
     language: Language;
     theme: ThemeMode;
+    syncUrl?: string | null;
 }
 
 /**
@@ -28,6 +30,7 @@ export interface SettingsCreateInput {
 export interface SettingsUpdateInput {
     language?: Language;
     theme?: ThemeMode;
+    syncUrl?: string | null;
 }
 
 /**

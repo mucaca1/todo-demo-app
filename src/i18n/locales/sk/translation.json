@@ -5,6 +5,7 @@
         "home": "Domov",
         "settings": "Nastavenia",
         "save": "Uložiť",
+        "saving": "Ukladá sa...",
         "cancel": "Zrušiť",
         "back": "Späť",
         "next": "Ďalej",
@@ -54,7 +55,16 @@
         "general": "Všeobecné",
         "tags": "Značky",
         "appearance": "Vzhľad",
-        "theme": "Téma"
+        "theme": "Téma",
+        "database": {
+            "title": "Pripojenie k databáze",
+            "syncUrl": "Synchronizačná URL",
+            "syncUrlHelper": "Zadajte URL adresu Evolu synchronizačného servera pre aktiváciu cloudovej synchronizácie",
+            "notConfigured": "Nenakonfigurované - iba lokálne dáta",
+            "configured": "Pripojené k synchronizačnému serveru",
+            "saved": "Nastavenia boli úspešne uložené",
+            "clear": "Vymazať"
+        }
     },
     "tags": {
         "title": "Spravovať značky",
