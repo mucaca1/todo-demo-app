@@ -37,7 +37,6 @@ const Settings = {
     id: SettingsId,
     language: Evolu.NonEmptyString100,
     theme: Evolu.NonEmptyString100,
-    syncUrl: Evolu.nullOr(Evolu.NonEmptyString100),
 }
 
 export const Schema = {

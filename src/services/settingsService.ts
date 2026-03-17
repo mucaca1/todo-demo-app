@@ -5,7 +5,7 @@
 import { useEvolu } from "../evolu-init";
 import { SettingsId } from "../types/settings";
 import { Language, ThemeMode } from "../types/common";
-import { Result, NonEmptyString100 } from "@evolu/common";
+import { Result } from "@evolu/common";
 
 /**
  * Return type for settings service operations
@@ -21,11 +21,10 @@ export function useSettingsService() {
     /**
      * Create initial settings
      */
-    const createSettings = (language: Language, theme: ThemeMode, syncUrl?: string | null): ServiceResult => {
+    const createSettings = (language: Language, theme: ThemeMode): ServiceResult => {
         const result = insert("settings", {
             language,
             theme,
-            syncUrl: syncUrl ? NonEmptyString100.from(syncUrl) : null,
         });
 
         if (!result.ok) {
@@ -68,32 +67,15 @@ export function useSettingsService() {
     };
 
     /**
-     * Update sync URL setting
-     */
-    const updateSyncUrl = (id: SettingsId, syncUrl: string | null): ServiceResult => {
-        const result = update("settings", {
-            id,
-            syncUrl: syncUrl ? NonEmptyString100.from(syncUrl) : null,
-        });
-
-        if (!result.ok) {
-            console.error("Failed to update sync URL:", result.error.value);
-        }
-
-        return result;
-    };
-
-    /**
      * Update all settings at once
      */
     const updateSettings = (
         id: SettingsId,
-        settings: { language?: Language; theme?: ThemeMode; syncUrl?: string | null }
+        settings: { language?: Language; theme?: ThemeMode }
     ): ServiceResult => {
         const result = update("settings", {
             id,
             ...settings,
-            syncUrl: settings.syncUrl ? NonEmptyString100.from(settings.syncUrl) : null,
         });
 
         if (!result.ok) {
@@ -107,7 +89,6 @@ export function useSettingsService() {
         createSettings,
         updateLanguage,
         updateTheme,
-        updateSyncUrl,
         updateSettings,
     };
 }

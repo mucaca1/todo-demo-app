@@ -38,6 +38,7 @@ export function TodoItem({ todo, allTags, onToggle, onEdit, onDelete }: TodoItem
                 />
                 <ListItemText
                     primary={todo.title}
+                    secondaryTypographyProps={{ component: 'div' }}
                     secondary={
                         <Box>
                             <Box>{todo.description}</Box>

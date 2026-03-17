@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import {
     Box,
     TextField,
@@ -15,8 +15,35 @@ import {
 } from "@mui/icons-material";
 import { useTranslation } from "react-i18next";
 import { QueryRows } from "@evolu/common";
-import { useSettingsService } from "../../services";
-import { SettingsId } from "../../types/settings";
+
+// localStorage key for sync URL
+const SYNC_URL_STORAGE_KEY = "evolu_sync_url";
+
+/**
+ * Get sync URL from localStorage
+ */
+function getStoredSyncUrl(): string | null {
+    try {
+        return localStorage.getItem(SYNC_URL_STORAGE_KEY);
+    } catch {
+        return null;
+    }
+}
+
+/**
+ * Save sync URL to localStorage
+ */
+function saveStoredSyncUrl(url: string | null): void {
+    try {
+        if (url) {
+            localStorage.setItem(SYNC_URL_STORAGE_KEY, url);
+        } else {
+            localStorage.removeItem(SYNC_URL_STORAGE_KEY);
+        }
+    } catch (error) {
+        console.error("Failed to save sync URL to localStorage:", error);
+    }
+}
 
 // =============================================================================
 // Section Component
@@ -58,41 +85,44 @@ export function DatabaseConnectionSettings({
     settingRows,
 }: IDatabaseConnectionSettingsArgs) {
     const { t } = useTranslation();
-    const { updateSyncUrl } = useSettingsService();
 
-    const currentSettings = settingRows[0];
-    const currentSyncUrl = currentSettings?.syncUrl as string | null;
-
-    const [syncUrl, setSyncUrl] = useState(currentSyncUrl || "");
+    // Load sync URL from localStorage on mount
+    const [syncUrl, setSyncUrl] = useState(() => getStoredSyncUrl() || "");
+    const [currentSyncUrl, setCurrentSyncUrl] = useState<string | null>(() => getStoredSyncUrl());
     const [isSaving, setIsSaving] = useState(false);
     const [showSuccess, setShowSuccess] = useState(false);
+
+    // Update state when localStorage changes (e.g., from another tab)
+    useEffect(() => {
+        const handleStorageChange = () => {
+            const stored = getStoredSyncUrl();
+            setCurrentSyncUrl(stored);
+            setSyncUrl(stored || "");
+        };
+
+        window.addEventListener("storage", handleStorageChange);
+        return () => window.removeEventListener("storage", handleStorageChange);
+    }, []);
 
     const handleSave = () => {
         setIsSaving(true);
         setShowSuccess(false);
 
-        const result = updateSyncUrl(
-            currentSettings.id as SettingsId,
-            syncUrl.trim() || null
-        );
+        const urlToSave = syncUrl.trim() || null;
+        saveStoredSyncUrl(urlToSave);
+        setCurrentSyncUrl(urlToSave);
 
         setIsSaving(false);
-
-        if (result.ok) {
-            setShowSuccess(true);
-            setTimeout(() => setShowSuccess(false), 3000);
-        } else {
-            console.log(result.error.message);
-        }
+        setShowSuccess(true);
+        setTimeout(() => setShowSuccess(false), 3000);
     };
 
     const handleClear = () => {
         setSyncUrl("");
-        const result = updateSyncUrl(currentSettings.id as SettingsId, null);
-        if (result.ok) {
-            setShowSuccess(true);
-            setTimeout(() => setShowSuccess(false), 3000);
-        }
+        saveStoredSyncUrl(null);
+        setCurrentSyncUrl(null);
+        setShowSuccess(true);
+        setTimeout(() => setShowSuccess(false), 3000);
     };
 
     return (
