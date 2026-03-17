@@ -8,6 +8,7 @@ import {
 } from "@mui/material";
 import { useTranslation } from "react-i18next";
 import { Todo } from "../../types/todo";
+import { Tag } from "../../types/tag";
 import { TodoItem } from "./TodoItem";
 
 export interface TodoListProps {
@@ -15,6 +16,7 @@ export interface TodoListProps {
     titleIcon: SvgIconComponent;
     titleIconColor?: "primary" | "success" | "secondary" | "error" | "info" | "warning";
     todos: Todo[];
+    allTags: Tag[];
     onToggle: (id: Todo["id"], currentValue: boolean) => void;
     onEdit: (todo: Todo) => void;
     onDelete: (id: Todo["id"]) => void;
@@ -28,6 +30,7 @@ export function TodoList({
     titleIcon: TitleIcon,
     titleIconColor = "primary",
     todos,
+    allTags,
     onToggle,
     onEdit,
     onDelete,
@@ -64,6 +67,7 @@ export function TodoList({
                     <TodoItem
                         key={todo.id}
                         todo={todo}
+                        allTags={allTags}
                         onToggle={onToggle}
                         onEdit={onEdit}
                         onDelete={onDelete}

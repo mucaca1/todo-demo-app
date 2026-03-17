@@ -52,7 +52,27 @@
         },
         "privateZone": "Súkromie",
         "general": "Všeobecné",
-        "appearance": "Vzhľad"
+        "tags": "Značky",
+        "appearance": "Vzhľad",
+        "theme": "Téma"
+    },
+    "tags": {
+        "title": "Spravovať značky",
+        "addTag": "Pridať značku",
+        "editTag": "Upraviť značku",
+        "deleteTag": "Odstrániť",
+        "name": "Názov",
+        "color": "Farba",
+        "preview": "Náhľad",
+        "noTags": "Zatiaľ nie sú vytvorené žiadne značky",
+        "noTagsHint": "Vytvorte značku pre organizáciu vašich úloh",
+        "count": "{{count}} značiek",
+        "nameRequired": "Názov značky je povinný",
+        "createError": "Nepodarilo sa vytvoriť značku",
+        "updateError": "Nepodarilo sa aktualizovať značku",
+        "deleteConfirmTitle": "Odstrániť značku?",
+        "deleteConfirmMessage": "Táto značka bude odstránená zo všetkých úloh. Túto akciu nemožno vrátiť späť.",
+        "selectTags": "Vybrať značky"
     },
     "welcome": {
         "greeting": "Vitajte 👋",

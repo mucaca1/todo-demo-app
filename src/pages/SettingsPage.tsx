@@ -10,11 +10,13 @@ import {
 import {
     Lock as LockIcon,
     Settings as SettingsIcon,
+    Label as LabelIcon,
 } from "@mui/icons-material";
 import { useTranslation } from "react-i18next";
 import { QueryRows } from "@evolu/common";
 import { GeneralSettings } from "../components/settings/GeneralSettings";
 import { PrivateZone } from "../components/settings/PrivateZone";
+import { TagsSettings } from "../components/tag";
 
 export type ISettingsArgs = {
     settingRows: QueryRows
@@ -64,6 +66,11 @@ export function SettingsPage({ settingRows }: ISettingsArgs) {
             label: t("settings.general"),
             icon: <SettingsIcon />,
             component: <GeneralSettings settingRows={settingRows} />,
+        },
+        {
+            label: t("settings.tags"),
+            icon: <LabelIcon />,
+            component: <TagsSettings />,
         },
         {
             label: t("settings.privateZone"),

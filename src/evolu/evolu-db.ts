@@ -12,6 +12,24 @@ const Todo = {
     completeAt: Evolu.nullOr(Evolu.DateIso)
 }
 
+const TagId = Evolu.id("Tag");
+export type TagId = typeof TagId.Type;
+
+const Tag = {
+    id: TagId,
+    name: Evolu.NonEmptyString100,
+    color: Evolu.NonEmptyString100,
+}
+
+const TodoTagId = Evolu.id("TodoTag");
+export type TodoTagId = typeof TodoTagId.Type;
+
+const TodoTag = {
+    id: TodoTagId,
+    todoId: TodoId,
+    tagId: TagId,
+}
+
 const SettingsId = Evolu.id("SettingsId");
 export type SettingsId = typeof SettingsId.Type;
 
@@ -23,5 +41,7 @@ const Settings = {
 
 export const Schema = {
     todo: Todo,
+    tag: Tag,
+    todoTag: TodoTag,
     settings: Settings
 };

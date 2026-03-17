@@ -2,7 +2,7 @@
  * Todo-related types
  */
 
-import { TodoId } from '../evolu/evolu-db';
+import { TodoId, TagId } from '../evolu/evolu-db';
 
 /**
  * Todo item representation for UI display
@@ -13,6 +13,7 @@ export interface Todo {
     description: string;
     done: boolean;
     finishedAt?: Date;
+    tags?: TagId[];
 }
 
 /**

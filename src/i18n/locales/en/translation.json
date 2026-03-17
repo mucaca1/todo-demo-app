@@ -52,8 +52,27 @@
         },
         "privateZone": "Private",
         "general": "General",
+        "tags": "Tags",
         "appearance": "Appearance",
         "theme": "Theme"
+    },
+    "tags": {
+        "title": "Manage Tags",
+        "addTag": "Add Tag",
+        "editTag": "Edit Tag",
+        "deleteTag": "Delete",
+        "name": "Name",
+        "color": "Color",
+        "preview": "Preview",
+        "noTags": "No tags created yet",
+        "noTagsHint": "Create a tag to start organizing your todos",
+        "count": "{{count}} tag(s)",
+        "nameRequired": "Tag name is required",
+        "createError": "Failed to create tag",
+        "updateError": "Failed to update tag",
+        "deleteConfirmTitle": "Delete Tag?",
+        "deleteConfirmMessage": "This tag will be removed from all todos. This action cannot be undone.",
+        "selectTags": "Select tags"
     },
     "welcome": {
         "greeting": "Welcome 👋",

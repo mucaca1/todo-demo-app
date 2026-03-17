@@ -10,18 +10,22 @@ import {
 } from "@mui/material";
 import { useTranslation } from "react-i18next";
 import { Todo } from "../../types/todo";
+import { Tag, TagId } from "../../types/tag";
+import { TagSelector } from "../tag";
 
 export interface TodoFormProps {
     open: boolean;
     editingTodo: Todo | null;
-    onSave: (title: string, description: string) => void;
+    allTags: Tag[];
+    onSave: (title: string, description: string, tagIds: TagId[]) => void;
     onClose: () => void;
 }
 
-export function TodoForm({ open, editingTodo, onSave, onClose }: TodoFormProps) {
+export function TodoForm({ open, editingTodo, allTags, onSave, onClose }: TodoFormProps) {
     const { t } = useTranslation();
     const [title, setTitle] = useState("");
     const [description, setDescription] = useState("");
+    const [selectedTagIds, setSelectedTagIds] = useState<TagId[]>([]);
 
     // Reset form when opening/closing or when editingTodo changes
     useEffect(() => {
@@ -29,16 +33,18 @@ export function TodoForm({ open, editingTodo, onSave, onClose }: TodoFormProps) 
             if (editingTodo) {
                 setTitle(editingTodo.title);
                 setDescription(editingTodo.description);
+                setSelectedTagIds(editingTodo.tags || []);
             } else {
                 setTitle("");
                 setDescription("");
+                setSelectedTagIds([]);
             }
         }
     }, [open, editingTodo]);
 
     const handleSave = () => {
         if (!title.trim()) return;
-        onSave(title.trim(), description.trim());
+        onSave(title.trim(), description.trim(), selectedTagIds);
     };
 
     return (
@@ -61,6 +67,11 @@ export function TodoForm({ open, editingTodo, onSave, onClose }: TodoFormProps) 
                         onChange={(e) => setDescription(e.target.value)}
                         multiline
                         minRows={3}
+                    />
+                    <TagSelector
+                        allTags={allTags}
+                        selectedTagIds={selectedTagIds}
+                        onChange={setSelectedTagIds}
                     />
                 </Stack>
             </DialogContent>
