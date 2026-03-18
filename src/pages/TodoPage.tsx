@@ -9,7 +9,7 @@ import { useQueries } from "@evolu/react";
 import { TodoId, Todo } from "../types/todo";
 import { Tag, TagId } from "../types/tag";
 import { TActiveTodosRow } from "../evolu-db/evolu-query";
-import { activeTodos, allTags, todoTags } from "../evolu/evolu-query";
+import { activeTodos, allTags, allTodoTags } from "../evolu/evolu-query";
 import { useTodoService, useTagService } from "../services";
 import { useTranslation } from "react-i18next";
 import { TodoList, TodoForm } from "../components/todo";
@@ -25,13 +25,8 @@ export default function TodoPage({ todoRows }: IPageArgs) {
     const [openForm, setOpenForm] = useState(false);
     const [editing, setEditing] = useState<Todo | null>(null);
 
-    // Query all tags
-    const [allTagsRows] = useQueries([allTags]);
-
-    // Query tags for each todo
-    const todoIds = todoRows.map((row: TActiveTodosRow) => row.id as TodoId);
-    const todoTagQueries = todoIds.map((id) => todoTags(id));
-    const todoTagResults = useQueries(todoTagQueries);
+    // Query all tags and all todo-tag relationships (stable number of queries)
+    const [allTagsRows, allTodoTagRows] = useQueries([allTags, allTodoTags]);
 
     // Convert tag rows to Tag objects
     const allTagObjects: Tag[] = allTagsRows.map((row: any) => ({
@@ -40,12 +35,14 @@ export default function TodoPage({ todoRows }: IPageArgs) {
         color: row.color as string,
     }));
 
-    // Create a map of todoId -> tagIds
+    // Create a map of todoId -> tagIds from the flat results
     const todoTagMap = new Map<TodoId, TagId[]>();
-    todoIds.forEach((todoId, index) => {
-        const tagRows = todoTagResults[index] || [];
-        const tagIds = tagRows.map((row: any) => row.id as TagId);
-        todoTagMap.set(todoId, tagIds);
+    todoRows.forEach((row: TActiveTodosRow) => {
+        const todoId = row.id as TodoId;
+        const tags = allTodoTagRows
+            .filter((tagRow: any) => tagRow.todoId === todoId)
+            .map((tagRow: any) => tagRow.id as TagId);
+        todoTagMap.set(todoId, tags);
     });
 
     // Separate todos into active and finished lists

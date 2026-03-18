@@ -26,6 +26,16 @@ export const allTags: Evolu.Query = evolu.createQuery((db) =>
 );
 export type TAllTagsRow = typeof allTags.Row;
 
+export const allTodoTags: Evolu.Query = evolu.createQuery((db) =>
+    db
+        .selectFrom("todoTag")
+        .innerJoin("tag", "tag.id", "todoTag.tagId")
+        .select(["todoTag.todoId", "tag.id", "tag.name", "tag.color"])
+        .where("todoTag.isDeleted", "is not", Evolu.sqliteTrue)
+        .where("tag.isDeleted", "is not", Evolu.sqliteTrue)
+);
+export type TAllTodoTagsRow = typeof allTodoTags.Row;
+
 export const todoTags = (todoId: TodoId): Evolu.Query =>
     evolu.createQuery((db) =>
         db
