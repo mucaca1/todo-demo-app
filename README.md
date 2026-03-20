@@ -4,9 +4,9 @@ This is basic todo app for learning.
 The main goal on this project is create some simple structure for web / pc application using react, [evolu](https://www.evolu.dev/docs)  and [electron](https://www.electronjs.org/).
 
 # ToDo List:
-- [ ] React web app with vite
+- [X] React web app with vite
 - [ ] Basic Evolu app
-    - [ ] Owner settings
+    - [X] Owner settings
     - [ ] Export
     - [ ] Merge settings
 - [ ] Basic ToDo app
@@ -20,7 +20,7 @@ The main goal on this project is create some simple structure for web / pc appli
     - [x] Electron installer
     - [x] Electron version auto-updater
     - [ ] Menu use window components (instead web components in web)
-- [ ] Translations (multilanguage)
+- [X] Translations (multilanguage)
 - [ ] GitHub
     - [ ] Automatic builing
     - [ ] AI review
