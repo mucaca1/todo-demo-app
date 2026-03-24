@@ -13,6 +13,7 @@ import { activeTodos, allTags, allTodoTags } from "../evolu/evolu-query";
 import { useTodoService, useTagService } from "../services";
 import { useTranslation } from "react-i18next";
 import { TodoList, TodoForm } from "../components/todo";
+import { HistoryDialog } from "../components/history/HistoryDialog";
 
 export type IPageArgs = {
     todoRows: QueryRows;
@@ -24,6 +25,7 @@ export default function TodoPage({ todoRows }: IPageArgs) {
     const { t } = useTranslation();
     const [openForm, setOpenForm] = useState(false);
     const [editing, setEditing] = useState<Todo | null>(null);
+    const [historyTodoId, setHistoryTodoId] = useState<TodoId | null>(null);
 
     // Query all tags and all todo-tag relationships (stable number of queries)
     const [allTagsRows, allTodoTagRows] = useQueries([allTags, allTodoTags]);
@@ -121,6 +123,20 @@ export default function TodoPage({ todoRows }: IPageArgs) {
         setEditing(null);
     };
 
+    const handleShowHistory = (id: TodoId) => {
+        setHistoryTodoId(id);
+    };
+
+    const handleCloseHistory = () => {
+        setHistoryTodoId(null);
+    };
+
+    // Find current todo for history dialog
+    const allTodos = [...activeTodos, ...finished];
+    const currentTodo = historyTodoId
+        ? allTodos.find((todo) => todo.id === historyTodoId) || null
+        : null;
+
     return (
         <Box p={3} maxWidth={800} mx="auto">
             <Stack direction="row" justifyContent="space-between" mb={2}>
@@ -142,6 +158,7 @@ export default function TodoPage({ todoRows }: IPageArgs) {
                 onToggle={handleToggle}
                 onEdit={openEdit}
                 onDelete={handleDelete}
+                onShowHistory={handleShowHistory}
                 emptyMessage={t("todo.noActiveTodos")}
             />
 
@@ -154,6 +171,7 @@ export default function TodoPage({ todoRows }: IPageArgs) {
                 onToggle={handleToggle}
                 onEdit={openEdit}
                 onDelete={handleDelete}
+                onShowHistory={handleShowHistory}
                 initialVisibleCount={3}
             />
 
@@ -163,6 +181,14 @@ export default function TodoPage({ todoRows }: IPageArgs) {
                 allTags={allTagObjects}
                 onSave={handleSave}
                 onClose={handleCloseForm}
+            />
+
+            <HistoryDialog
+                open={historyTodoId !== null}
+                todoId={historyTodoId}
+                currentTodo={currentTodo}
+                allTags={allTagObjects}
+                onClose={handleCloseHistory}
             />
         </Box>
     );

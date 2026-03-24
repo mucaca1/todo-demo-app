@@ -20,6 +20,7 @@ export interface TodoListProps {
     onToggle: (id: Todo["id"], currentValue: boolean) => void;
     onEdit: (todo: Todo) => void;
     onDelete: (id: Todo["id"]) => void;
+    onShowHistory?: (id: Todo["id"]) => void;
     emptyMessage?: string;
     /** If set, show "Show all/Show less" button when todos exceed this count */
     initialVisibleCount?: number;
@@ -34,6 +35,7 @@ export function TodoList({
     onToggle,
     onEdit,
     onDelete,
+    onShowHistory,
     emptyMessage,
     initialVisibleCount,
 }: TodoListProps) {
@@ -71,6 +73,7 @@ export function TodoList({
                         onToggle={onToggle}
                         onEdit={onEdit}
                         onDelete={onDelete}
+                        onShowHistory={onShowHistory}
                     />
                 ))}
                 {todos.length === 0 && emptyMessage && (

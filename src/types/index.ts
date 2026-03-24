@@ -11,3 +11,12 @@ export type { Todo, TodoCreateInput, TodoUpdateInput, TodoId } from './todo';
 
 // Settings types
 export type { Settings, SettingsCreateInput, SettingsUpdateInput, SettingsId } from './settings';
+
+// History time travel types
+export type {
+  ColumnHistory,
+  TodoSnapshot,
+  TimelineEntry,
+  FieldChange,
+  HistoryState,
+} from './historyTimeTravel';

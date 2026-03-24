@@ -43,5 +43,5 @@ export const Schema = {
     todo: Todo,
     tag: Tag,
     todoTag: TodoTag,
-    settings: Settings
+    settings: Settings,
 };
