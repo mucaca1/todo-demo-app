@@ -63,7 +63,14 @@
             "notConfigured": "Not configured - local data only",
             "configured": "Connected to sync server",
             "saved": "Settings saved successfully",
-            "clear": "Clear"
+            "clear": "Clear",
+            "status": {
+                "local": "Local mode - data stored only on this device",
+                "syncing": "Syncing data...",
+                "synced": "Synced - data backed up to cloud",
+                "error": "Sync failed - working in local mode",
+                "initial": "Checking sync status..."
+            }
         }
     },
     "tags": {

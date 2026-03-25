@@ -63,7 +63,14 @@
             "notConfigured": "Nenakonfigurované - iba lokálne dáta",
             "configured": "Pripojené k synchronizačnému serveru",
             "saved": "Nastavenia boli úspešne uložené",
-            "clear": "Vymazať"
+            "clear": "Vymazať",
+            "status": {
+                "local": "Lokálny režim - dáta sú uložené iba na tomto zariadení",
+                "syncing": "Synchronizácia dát...",
+                "synced": "Synchronizované - dáta sú zálohované v cloude",
+                "error": "Synchronizácia zlyhala - pracuje sa v lokálnom režime",
+                "initial": "Kontrola stavu synchronizácie..."
+            }
         }
     },
     "tags": {
