@@ -18,7 +18,7 @@ function transformTodoRows(todoRows: QueryRows): Todo[] {
     return todoRows.map((row: TActiveTodosRow) => ({
         id: row.id as TodoId,
         title: row.title as string,
-        description: row.description as string,
+        description: row.description ?? "",  // Convert null to empty string
         done: row.isCompleted ? true : false,
     }));
 }

@@ -55,7 +55,7 @@ export default function TodoPage({ todoRows }: IPageArgs) {
         const todo: Todo = {
             id: todoId,
             title: row.title as string,
-            description: row.description as string,
+            description: row.description ?? "",  // Convert null to empty string
             done: row.isCompleted ? true : false,
             tags: todoTagMap.get(todoId) || [],
         };
@@ -80,7 +80,7 @@ export default function TodoPage({ todoRows }: IPageArgs) {
         if (editing) {
             updateTodo(editing.id, {
                 title,
-                description: description || undefined,
+                description: description || null,
             });
 
             // Update tags: remove old ones and add new ones

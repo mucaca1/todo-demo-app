@@ -129,3 +129,90 @@ export const timestampToMillis = (timestampBytes: Uint8Array): number => {
   );
   return timestamp.millis;
 };
+
+/**
+ * Generic query for all columns history for any Evolu table
+ *
+ * Returns all historical changes across all columns for a specific row
+ * in any Evolu table. Each row represents a single column change at a
+ * specific timestamp.
+ *
+ * This is a universal version of todoAllColumnsHistory that works with
+ * any table name.
+ *
+ * @param tableName - The Evolu table name (e.g., "todo", "tag", "settings")
+ * @param rowId - The row ID to get all history for
+ * @returns An Evolu Query that can be loaded or subscribed to
+ * @throws {MessageTableNotFoundError} If the evolu_message table doesn't exist
+ *
+ * @example
+ * ```ts
+ * const tagHistoryQuery = queryAllColumnsHistory("tag", tagId);
+ * const historyRows = await evolu.loadQuery(tagHistoryQuery);
+ * // Each row has: { column: string, value: unknown, timestamp: Uint8Array }
+ * ```
+ */
+export const queryAllColumnsHistory = (
+  tableName: string,
+  rowId: string
+): Evolu.Query =>
+  evolu.createQuery((db) =>
+    db
+      .selectFrom("evolu_history")
+      .select(["column", "value", "timestamp"])
+      .where("table", "==", tableName)
+      .where("id", "==", Evolu.idToIdBytes(rowId))
+      .orderBy("timestamp", "desc")
+  );
+
+/**
+ * Type for rows returned by queryAllColumnsHistory
+ */
+export type TAllColumnsHistoryRow = {
+  column: string;
+  value: unknown;
+  timestamp: Uint8Array;
+};
+
+/**
+ * Query TodoTag history for a specific todo
+ *
+ * Returns all historical changes in the todoTag junction table for a specific todo.
+ * This allows tracking when tags were added or removed from a todo.
+ *
+ * Each row represents a todoTag row change (insert/update/delete) with:
+ * - column: The column that changed (todoId, tagId, or isDeleted)
+ * - value: The value at that timestamp
+ * - timestamp: When the change occurred
+ *
+ * @param todoId - The todo ID to get tag history for
+ * @returns An Evolu Query that can be loaded or subscribed to
+ *
+ * @example
+ * ```ts
+ * const tagHistoryQuery = todoTagHistory(todoId);
+ * const historyRows = await evolu.loadQuery(tagHistoryQuery);
+ * // Returns history of todoTag rows associated with this todo
+ * ```
+ */
+export const todoTagHistory = (todoId: TodoId): Evolu.Query =>
+  evolu.createQuery((db) =>
+    db
+      .selectFrom("evolu_history")
+      .select(["rowId", "column", "value", "timestamp"])
+      .where("table", "==", "todoTag")
+      // Note: We can't filter by todoId directly in the query because todoId is a column value
+      // in the todoTag table, not the row identifier. We need to get all todoTag history
+      // and filter by the todoId column value.
+      .orderBy("timestamp", "desc")
+  );
+
+/**
+ * Type for rows returned by todoTagHistory
+ */
+export type TTodoTagHistoryRow = {
+  rowId: Uint8Array;
+  column: string;
+  value: unknown;
+  timestamp: Uint8Array;
+};

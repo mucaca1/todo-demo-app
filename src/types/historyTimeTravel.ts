@@ -6,7 +6,7 @@
  * in time from creation to the current state.
  */
 
-import { TodoId } from '../evolu/evolu-db';
+import { TodoId, TagId } from '../evolu/evolu-db';
 
 /**
  * A single historical change for a specific column
@@ -40,6 +40,8 @@ export interface TodoSnapshot {
   isCompleted: number | null;
   /** ISO date string when the todo was/will be completed, or null if not applicable */
   completeAt: string | null;
+  /** Array of tag IDs associated with this todo at this point in time */
+  tags: TagId[];
   /** Unix timestamp (ms) representing when this snapshot was valid */
   timestamp: number;
 }

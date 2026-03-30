@@ -10,7 +10,7 @@ import { TodoId, TagId } from '../evolu/evolu-db';
 export interface Todo {
     id: TodoId;
     title: string;
-    description: string;
+    description: string | null;  // Match database schema which allows null
     done: boolean;
     finishedAt?: Date;
     tags?: TagId[];
@@ -29,7 +29,7 @@ export interface TodoCreateInput {
  */
 export interface TodoUpdateInput {
     title?: string;
-    description?: string;
+    description?: string | null;
     isCompleted?: number;
     completeAt?: string | null;
     isDeleted?: number;

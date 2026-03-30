@@ -1,28 +1,21 @@
+/**
+ * History Dialog Component
+ *
+ * This component has been refactored to use the universal history system.
+ * It loads Todo history and displays it using the UniversalHistoryDialog
+ * with a table view.
+ *
+ * The component maintains backward compatibility with the existing API
+ * while using the new universal history components internally.
+ */
+
 import React, { useEffect, useCallback } from "react";
-import {
-    Dialog,
-    DialogTitle,
-    DialogContent,
-    DialogActions,
-    Button,
-    IconButton,
-    Stack,
-    Box,
-    Typography,
-    Divider,
-    SxProps,
-    Theme,
-} from "@mui/material";
-import CloseIcon from "@mui/icons-material/Close";
-import ArrowBackIcon from "@mui/icons-material/ArrowBack";
-import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
-import HistoryIcon from "@mui/icons-material/History";
 import { TodoId } from "../../types/todo";
 import { Todo } from "../../types/todo";
 import { Tag } from "../../types/tag";
-import { useHistoryTimeTravel } from "../../services/historyTimeTravelService";
-import { HistoryViewer } from "./HistoryViewer";
-import { HistoryTimeline } from "./HistoryTimeline";
+import { useHistoryTimeTravel, todoSnapshotToObjectSnapshot } from "../../services/historyTimeTravelService";
+import { UniversalHistoryDialog } from "../universalHistory";
+import type { ObjectSnapshot } from "../../types/universalHistory";
 
 export interface HistoryDialogProps {
     /** Whether the dialog is open */
@@ -31,33 +24,28 @@ export interface HistoryDialogProps {
     todoId: TodoId | null;
     /** The current todo state (for reference) */
     currentTodo: Todo | null;
-    /** All available tags for displaying */
+    /** All available tags for displaying (kept for backward compatibility) */
     allTags: Tag[];
     /** Callback when dialog is closed */
     onClose: () => void;
 }
 
-const dialogContentStyles: SxProps<Theme> = {
-    minHeight: 400,
-    maxHeight: 600,
-};
-
+/**
+ * History Dialog Component
+ *
+ * Loads Todo history and displays it in a table view using the
+ * universal history dialog component.
+ */
 export function HistoryDialog({
     open,
     todoId,
     currentTodo,
-    allTags,
     onClose,
 }: HistoryDialogProps) {
     const {
         historyState,
         loadTodoHistory,
-        goBack,
-        goForward,
-        jumpToSnapshot,
         resetHistory,
-        getTimelineEntries,
-        isCurrentState,
     } = useHistoryTimeTravel();
 
     // Load history when dialog opens with a todoId
@@ -73,157 +61,59 @@ export function HistoryDialog({
         onClose();
     }, [resetHistory, onClose]);
 
-    // Handle timeline entry click
-    const handleSelectEntry = useCallback(
-        (index: number) => {
-            jumpToSnapshot(index);
-        },
-        [jumpToSnapshot]
-    );
+    // Convert TodoSnapshots to universal ObjectSnapshots
+    const universalSnapshots: ObjectSnapshot[] = React.useMemo(() => {
+        if (!historyState?.snapshots) return [];
 
-    // Handle back button
-    const handleBack = useCallback(() => {
-        goBack();
-    }, [goBack]);
+        return historyState.snapshots.map((todoSnapshot, index) => ({
+            ...todoSnapshotToObjectSnapshot(todoSnapshot),
+            version: index + 1,
+        }));
+    }, [historyState?.snapshots]);
 
-    // Handle forward button
-    const handleForward = useCallback(() => {
-        goForward();
-    }, [goForward]);
+    const dialogTitle = currentTodo?.title
+        ? `History: ${currentTodo.title}`
+        : "Todo History";
 
-    const timelineEntries = getTimelineEntries();
-    const currentIndex = historyState?.currentIndex ?? 0;
-    const totalSnapshots = historyState?.snapshots.length ?? 0;
-    const snapshot = historyState?.currentSnapshot ?? null;
-
-    // Display as "Step X of Y" where 1 is the oldest/initial state
-    const stepNumber = totalSnapshots > 0 ? currentIndex + 1 : 0;
-    const stepLabel =
-        totalSnapshots > 0 ? `Step ${stepNumber} of ${totalSnapshots}` : "No history";
+    // Note: allTags is kept for backward compatibility but not used
+    // in the new table-based view
 
     return (
-        <Dialog
+        <UniversalHistoryDialog
             open={open}
-            onClose={handleClose}
-            maxWidth="md"
-            fullWidth
-            PaperProps={{
-                sx: {
-                    maxHeight: "80vh",
+            snapshots={universalSnapshots}
+            config={{
+                tableName: "todo",
+                columns: ["title", "description", "isCompleted", "completeAt", "tags"],
+                fieldLabels: {
+                    title: "Title",
+                    description: "Description",
+                    isCompleted: "Status",
+                    completeAt: "Completion Date",
+                    tags: "Tags",
+                },
+                valueFormatters: {
+                    isCompleted: (value) => value === 1 ? "Completed" : "Incomplete",
+                    completeAt: (value) => {
+                        if (!value) return "Not set";
+                        return new Date(value as number).toLocaleString([], {
+                            month: "short",
+                            day: "numeric",
+                            hour: "2-digit",
+                            minute: "2-digit",
+                        });
+                    },
+                    tags: (value) => {
+                        if (!Array.isArray(value)) return "None";
+                        if (value.length === 0) return "None";
+                        return `${value.length} tag${value.length > 1 ? "s" : ""}`;
+                    },
                 },
             }}
-        >
-            <DialogTitle>
-                <Stack direction="row" alignItems="center" justifyContent="space-between">
-                    <Stack direction="row" alignItems="center" spacing={1}>
-                        <HistoryIcon color="primary" />
-                        <Typography variant="h6">
-                            {currentTodo?.title
-                                ? `History: ${currentTodo.title}`
-                                : "Todo History"}
-                        </Typography>
-                    </Stack>
-                    <IconButton onClick={handleClose} edge="end">
-                        <CloseIcon />
-                    </IconButton>
-                </Stack>
-            </DialogTitle>
-
-            <Divider />
-
-            <DialogContent sx={dialogContentStyles}>
-                {historyState === null ? (
-                    <Box
-                        sx={{
-                            display: "flex",
-                            justifyContent: "center",
-                            alignItems: "center",
-                            minHeight: 300,
-                        }}
-                    >
-                        <Typography color="text.secondary">Loading history...</Typography>
-                    </Box>
-                ) : totalSnapshots === 0 ? (
-                    <Box
-                        sx={{
-                            display: "flex",
-                            justifyContent: "center",
-                            alignItems: "center",
-                            minHeight: 300,
-                        }}
-                    >
-                        <Typography color="text.secondary">No history available for this todo</Typography>
-                    </Box>
-                ) : (
-                    <Stack spacing={2}>
-                        {/* Navigation controls */}
-                        <Stack
-                            direction="row"
-                            alignItems="center"
-                            justifyContent="space-between"
-                            spacing={2}
-                            sx={{
-                                bgcolor: "action.hover",
-                                p: 2,
-                                borderRadius: 1,
-                            }}
-                        >
-                            <Button
-                                startIcon={<ArrowBackIcon />}
-                                onClick={handleBack}
-                                disabled={!historyState.canGoBack}
-                                variant="outlined"
-                                size="small"
-                            >
-                                Back
-                            </Button>
-
-                            <Typography variant="body2" color="text.secondary">
-                                {stepLabel}
-                            </Typography>
-
-                            <Button
-                                endIcon={<ArrowForwardIcon />}
-                                onClick={handleForward}
-                                disabled={!historyState.canGoForward}
-                                variant="outlined"
-                                size="small"
-                            >
-                                Forward
-                            </Button>
-                        </Stack>
-
-                        {/* Snapshot preview */}
-                        <Box>
-                            <Typography variant="subtitle2" color="text.secondary" sx={{ mb: 1 }}>
-                                Preview
-                            </Typography>
-                            <HistoryViewer
-                                snapshot={snapshot}
-                                allTags={allTags}
-                                isCurrentState={isCurrentState()}
-                            />
-                        </Box>
-
-                        <Divider />
-
-                        {/* Timeline */}
-                        <Box sx={{ flex: 1, overflow: "auto" }}>
-                            <HistoryTimeline
-                                entries={timelineEntries}
-                                selectedIndex={currentIndex}
-                                onSelectEntry={handleSelectEntry}
-                            />
-                        </Box>
-                    </Stack>
-                )}
-            </DialogContent>
-
-            <DialogActions>
-                <Button onClick={handleClose} variant="contained">
-                    Close
-                </Button>
-            </DialogActions>
-        </Dialog>
+            initialIndex={historyState?.currentIndex ?? -1}
+            onClose={handleClose}
+            title={dialogTitle}
+            showNavigation={true}
+        />
     );
 }

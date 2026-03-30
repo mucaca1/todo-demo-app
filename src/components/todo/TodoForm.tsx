@@ -32,7 +32,7 @@ export function TodoForm({ open, editingTodo, allTags, onSave, onClose }: TodoFo
         if (open) {
             if (editingTodo) {
                 setTitle(editingTodo.title);
-                setDescription(editingTodo.description);
+                setDescription(editingTodo.description || "");
                 setSelectedTagIds(editingTodo.tags || []);
             } else {
                 setTitle("");
@@ -44,7 +44,9 @@ export function TodoForm({ open, editingTodo, allTags, onSave, onClose }: TodoFo
 
     const handleSave = () => {
         if (!title.trim()) return;
-        onSave(title.trim(), description.trim(), selectedTagIds);
+        // Safely handle null/undefined with nullish coalescing
+        const trimmedDescription = description?.trim() ?? "";
+        onSave(title.trim(), trimmedDescription, selectedTagIds);
     };
 
     return (
