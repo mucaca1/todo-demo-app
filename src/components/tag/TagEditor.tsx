@@ -20,9 +20,11 @@ import {
     Edit as EditIcon,
     Delete as DeleteIcon,
     Label as LabelIcon,
+    History as HistoryIcon,
 } from "@mui/icons-material";
 import { useTranslation } from "react-i18next";
 import { TagChip } from "./TagChip";
+import { TagHistoryDialog } from "./TagHistoryDialog";
 import { Tag, TagId, TagCreateInput, TagUpdateInput } from "../../types/tag";
 import { useTagService } from "../../services/tagService";
 
@@ -70,6 +72,7 @@ export function TagEditor({ tags }: TagEditorProps) {
         color: COLOR_PALETTE[0],
     });
     const [deleteConfirmId, setDeleteConfirmId] = useState<TagId | null>(null);
+    const [historyTagId, setHistoryTagId] = useState<TagId | null>(null);
     const [formError, setFormError] = useState<string | null>(null);
 
     const openCreateDialog = () => {
@@ -176,6 +179,14 @@ export function TagEditor({ tags }: TagEditorProps) {
                                 divider={index < tags.length - 1}
                                 secondaryAction={
                                     <Box sx={{ display: "flex", gap: 0.5 }}>
+                                        <IconButton
+                                            edge="end"
+                                            size="small"
+                                            onClick={() => setHistoryTagId(tag.id)}
+                                            aria-label={t("tags.showHistory", "Show history")}
+                                        >
+                                            <HistoryIcon fontSize="small" />
+                                        </IconButton>
                                         <IconButton
                                             edge="end"
                                             size="small"
@@ -310,6 +321,14 @@ export function TagEditor({ tags }: TagEditorProps) {
                     </Button>
                 </DialogActions>
             </Dialog>
+
+            {/* Tag History Dialog */}
+            <TagHistoryDialog
+                open={historyTagId !== null}
+                tagId={historyTagId}
+                currentTag={tags.find(t => t.id === historyTagId) ?? null}
+                onClose={() => setHistoryTagId(null)}
+            />
         </Box>
     );
 }
